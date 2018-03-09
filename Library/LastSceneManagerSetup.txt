@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/Cookie Clicker.unity
+  isLoaded: 1
+  isActive: 1

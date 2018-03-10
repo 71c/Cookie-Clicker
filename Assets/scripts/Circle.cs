@@ -10,8 +10,8 @@ public class Circle : MonoBehaviour {
 
 	public float v = 1f;
 	public bool onCookieClick;
-	public float sizeDesired = 0.5f;
-	public float size = 0.5f;
+	public float sizeDesired = 1f;
+	public float size = 1f;
 
 	public bool wobbleOn; // TODO: wobble
 
@@ -22,7 +22,9 @@ public class Circle : MonoBehaviour {
 
 	public float envelopeIncrement = 0.02f;
 
-	float sineStartingFramecount;
+//	float sineStartingFramecount;
+
+	public float scale;
 
 	void OnMouseDown() {
 		gameStats.score += gameStats.pointsPerClick;
@@ -38,11 +40,11 @@ public class Circle : MonoBehaviour {
 		//		envelope += 1f;
 		if (Input.GetMouseButton (0)) {
 			if (onCookieClick)
-				sizeDesired = 0.52f;
+				sizeDesired = 1.04f;
 			else
-				sizeDesired = 0.48f;
+				sizeDesired = 0.96f;
 		} else {
-			sizeDesired = 0.55f;
+			sizeDesired = 1.1f;
 		}
 	}
 
@@ -50,7 +52,7 @@ public class Circle : MonoBehaviour {
 		incrementEnvelope();
 		if (Input.GetMouseButton (0))
 			onCookieClick = true;
-		sizeDesired = 0.5f;
+		sizeDesired = 1f;
 	}
 
 	void OnMouseEnter() { // once when mouse enters me
@@ -64,7 +66,7 @@ public class Circle : MonoBehaviour {
 
 		size = sizeDesired * 0.6f + size * 0.4f;
 
-		actualSize = size + sine;
+		actualSize = scale * (size + sine);
 
 		transform.localScale = new Vector2 (actualSize, actualSize);
 	}

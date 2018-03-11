@@ -53,7 +53,7 @@
   <ItemGroup>
      <Compile Include="Assets\scripts\BuildingButton.cs" />
      <Compile Include="Assets\scripts\ButtonHandler.cs" />
-     <Compile Include="Assets\scripts\Circle.cs" />
+     <Compile Include="Assets\scripts\Cookie.cs" />
      <Compile Include="Assets\scripts\GameStats.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

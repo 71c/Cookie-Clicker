@@ -34,7 +34,7 @@ public class ButtonHandler : MonoBehaviour
 
 			buttonElementHolders.Add (new GameObject ());
 			buttonElementHolders.ElementAt (lastIndex).transform.SetParent (renderCanvas.transform, false);
-			buttonElementHolders.ElementAt (lastIndex).transform.localPosition = new Vector2(6.15f * 52f, y * 52f);
+			buttonElementHolders.ElementAt (lastIndex).transform.localPosition = new Vector2(286.7f, y * 52f);
 
 
 			// make button, add it to buildingButtons
@@ -43,16 +43,8 @@ public class ButtonHandler : MonoBehaviour
 
 			// set parent to element holder
 			buildingButtons.ElementAt(lastIndex).transform.SetParent(buttonElementHolders.ElementAt (lastIndex).transform, false);
+			buildingButtons.ElementAt (lastIndex).transform.localPosition = new Vector2 (0f, 0f);
 //			buildingButtons.ElementAt(lastIndex).transform.SetParent(renderCanvas.transform, false);
-
-			// add listener
-//			buildingButtons.ElementAt(lastIndex).GetComponent<Button> ().onClick.AddListener(TaskOnClick);
-
-			// set scale 
-//			buildingButtons.ElementAt (lastIndex).transform.localScale = new Vector2(100f, 100f);
-
-			// set the position (local)
-//			buildingButtons.ElementAt(lastIndex).transform.localPosition = new Vector2(0f, 0f);
 
 
 
@@ -69,7 +61,7 @@ public class ButtonHandler : MonoBehaviour
 			// set position
 			buildingButtonLables.ElementAt(lastIndex).transform.localPosition = new Vector2(0f, 0f);
 
-
+			buildingButtonLables.ElementAt(lastIndex).color = Color.white;
 
 
 
@@ -83,8 +75,10 @@ public class ButtonHandler : MonoBehaviour
 			buildingLevelTexts.ElementAt(lastIndex).transform.SetParent(buttonElementHolders.ElementAt (lastIndex).transform, false);
 
 //			// set position
-			buildingLevelTexts.ElementAt(lastIndex).transform.localPosition = new Vector2(0f, 0f);
+			buildingLevelTexts.ElementAt(lastIndex).transform.localPosition = new Vector2(120f, 0f);
 
+			// set color
+			buildingLevelTexts.ElementAt(lastIndex).color = Color.white;
 
 		}
 	}
@@ -93,7 +87,12 @@ public class ButtonHandler : MonoBehaviour
 		for (int i = 0; i < buildingButtonLables.Count; i++) {
 			buildingButtonLables.ElementAt(i).text = names[i] + " (+" + buildingButtons[i].cookiesPerSecond + " CpS)\n" + buildingButtons[i].price + " cookies";
 
-			buildingLevelTexts.ElementAt(i).text = ""+buildingButtons[i].level;
+			buildingLevelTexts.ElementAt(i).text = buildingButtons[i].level + "";
+
+			if (gameStats.score >= buildingButtons.ElementAt (i).price)
+				buildingButtons.ElementAt(i).GetComponent<Image>().color = new Color(0.75f, 0.75f, 0.75f);
+			else
+				buildingButtons.ElementAt(i).GetComponent<Image>().color = Color.gray;
 		}
 	}
 

@@ -71,3 +71,5 @@ public class Cookie : MonoBehaviour {
 		envelope = envelopeIncrement;
 	}
 }
+
+// TODO: i used this for background: http://asbienestar.co/wood-floor-background-tumblr/wood-floor-background-tumblr-in-excellent-sek-woodbackground/

@@ -12,7 +12,7 @@ public class ButtonHandler : MonoBehaviour
 	public List<BuildingButton> buildingButtons = new List<BuildingButton>();
 	public List<GameObject> buttonElementHolders = new List<GameObject> ();
 
-	public List<Text> buildingButtonLables = new List<Text> ();
+	public List<Text> buildingButtonLabels = new List<Text> ();
 	public List<Text> buildingLevelTexts = new List<Text> ();
 
 
@@ -44,24 +44,23 @@ public class ButtonHandler : MonoBehaviour
 			// set parent to element holder
 			buildingButtons.ElementAt(lastIndex).transform.SetParent(buttonElementHolders.ElementAt (lastIndex).transform, false);
 			buildingButtons.ElementAt (lastIndex).transform.localPosition = new Vector2 (0f, 0f);
-//			buildingButtons.ElementAt(lastIndex).transform.SetParent(renderCanvas.transform, false);
 
 
 
 
 			// add a text to buildingButtonLables
-			buildingButtonLables.Add(Instantiate(text, transform.position, transform.rotation) as Text);
+			buildingButtonLabels.Add(Instantiate(text, transform.position, transform.rotation) as Text);
 
 			// set parent to element holder
-			buildingButtonLables.ElementAt(lastIndex).transform.SetParent(buildingButtons.ElementAt (lastIndex).transform, false);
+			buildingButtonLabels.ElementAt(lastIndex).transform.SetParent(buildingButtons.ElementAt (lastIndex).transform, false);
 
 			// set the text to ""
-			setText (buildingButtonLables.ElementAt (lastIndex), "", 18);
+			setText (buildingButtonLabels.ElementAt (lastIndex), "", 18);
 
 			// set position
-			buildingButtonLables.ElementAt(lastIndex).transform.localPosition = new Vector2(0f, 0f);
+			buildingButtonLabels.ElementAt(lastIndex).transform.localPosition = new Vector2(0f, 0f);
 
-			buildingButtonLables.ElementAt(lastIndex).color = Color.white;
+			buildingButtonLabels.ElementAt(lastIndex).color = Color.white;
 
 
 
@@ -84,15 +83,18 @@ public class ButtonHandler : MonoBehaviour
 	}
 
 	void Update() {
-		for (int i = 0; i < buildingButtonLables.Count; i++) {
-			buildingButtonLables.ElementAt(i).text = names[i] + " (+" + buildingButtons[i].cookiesPerSecond + " CpS)\n" + buildingButtons[i].price + " cookies";
+		for (int i = 0; i < buildingButtonLabels.Count; i++) {
+			buildingButtonLabels.ElementAt(i).text = names[i] + " (+" + buildingButtons[i].cookiesPerSecond + " CpS)\n" + buildingButtons[i].price + " cookies";
 
 			buildingLevelTexts.ElementAt(i).text = buildingButtons[i].level + "";
 
-			if (gameStats.score >= buildingButtons.ElementAt (i).price)
-				buildingButtons.ElementAt(i).GetComponent<Image>().color = new Color(0.75f, 0.75f, 0.75f);
-			else
-				buildingButtons.ElementAt(i).GetComponent<Image>().color = Color.gray;
+			if (gameStats.score >= buildingButtons.ElementAt (i).price) {
+				buildingButtons.ElementAt (i).GetComponent<Image> ().color = new Color (0.7f, 0.7f, 0.7f);
+				buildingButtonLabels.ElementAt (i).color = Color.white;
+			} else {
+				buildingButtons.ElementAt (i).GetComponent<Image> ().color = Color.gray;
+				buildingButtonLabels.ElementAt (i).color = new Color (0.7f, 0.7f, 0.7f);
+			}
 		}
 	}
 

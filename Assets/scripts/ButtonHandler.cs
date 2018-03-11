@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
-
+using UnityEngine.EventSystems;
 public class ButtonHandler : MonoBehaviour
 {
 	public BuildingButton button;
@@ -25,28 +25,64 @@ public class ButtonHandler : MonoBehaviour
 
 
 	void Start() {
+
 		for (float y = 3.45f; y > -4.3f; y -= 2.14f) {
 			int lastIndex = buildingButtons.Count;
 
+
+
+
 			buttonElementHolders.Add (new GameObject ());
 			buttonElementHolders.ElementAt (lastIndex).transform.SetParent (renderCanvas.transform, false);
+			buttonElementHolders.ElementAt (lastIndex).transform.localPosition = new Vector2(6.15f * 52f, y * 52f);
 
+
+			// make button, add it to buildingButtons
 			createButton (names [lastIndex], prices [lastIndex], baseCookiesPerSeconds [lastIndex]);
 			buildingButtons.Add((BuildingButton)Instantiate(button, transform.position, transform.rotation));
+
+			// set parent to element holder
 			buildingButtons.ElementAt(lastIndex).transform.SetParent(buttonElementHolders.ElementAt (lastIndex).transform, false);
+//			buildingButtons.ElementAt(lastIndex).transform.SetParent(renderCanvas.transform, false);
 
-			buildingButtons.ElementAt(lastIndex).transform.position = new Vector2(6.15f * 52f, y * 52f);
+			// add listener
+//			buildingButtons.ElementAt(lastIndex).GetComponent<Button> ().onClick.AddListener(TaskOnClick);
+
+			// set scale 
+//			buildingButtons.ElementAt (lastIndex).transform.localScale = new Vector2(100f, 100f);
+
+			// set the position (local)
+//			buildingButtons.ElementAt(lastIndex).transform.localPosition = new Vector2(0f, 0f);
 
 
+
+
+			// add a text to buildingButtonLables
 			buildingButtonLables.Add(Instantiate(text, transform.position, transform.rotation) as Text);
 
-			buildingButtonLables.ElementAt(lastIndex).transform.SetParent(buttonElementHolders.ElementAt (lastIndex).transform, false);
+			// set parent to element holder
+			buildingButtonLables.ElementAt(lastIndex).transform.SetParent(buildingButtons.ElementAt (lastIndex).transform, false);
+
+			// set the text to ""
 			setText (buildingButtonLables.ElementAt (lastIndex), "", 18);
 
+			// set position
+			buildingButtonLables.ElementAt(lastIndex).transform.localPosition = new Vector2(0f, 0f);
+
+
+
+
+
+			// add a text to buildingLevelTexts
 			buildingLevelTexts.Add(Instantiate(text, transform.position, transform.rotation) as Text);
-			setText (buildingLevelTexts.ElementAt (lastIndex), "TEST", 36);
-//			buildingLevelTexts.ElementAt(lastIndex).transform.position = new Vector2(7.15f * 52f, y * 52f);
+
+			// set text to "TEST"
+			setText (buildingLevelTexts.ElementAt (lastIndex), "0", 36);
+
+			// set parent to element holder
 			buildingLevelTexts.ElementAt(lastIndex).transform.SetParent(buttonElementHolders.ElementAt (lastIndex).transform, false);
+
+//			// set position
 			buildingLevelTexts.ElementAt(lastIndex).transform.localPosition = new Vector2(0f, 0f);
 
 
@@ -57,7 +93,7 @@ public class ButtonHandler : MonoBehaviour
 		for (int i = 0; i < buildingButtonLables.Count; i++) {
 			buildingButtonLables.ElementAt(i).text = names[i] + " (+" + buildingButtons[i].cookiesPerSecond + " CpS)\n" + buildingButtons[i].price + " cookies";
 
-
+			buildingLevelTexts.ElementAt(i).text = ""+buildingButtons[i].level;
 		}
 	}
 
@@ -70,5 +106,16 @@ public class ButtonHandler : MonoBehaviour
 	void setText(Text textObject, string words, int size) {
 		textObject.fontSize = size; //Set the text box's text element font size and style:
 		textObject.text = words; //Set the text box's text element to the current textToDisplay:
+	}
+
+	public void TaskOnClick(BuildingButton button)
+	{
+		Debug.Log (button.myName);
+		if (gameStats.score >= button.price) {
+			gameStats.pointsPerSecond += button.cookiesPerSecond;
+			gameStats.score -= button.price;
+			button.level++;
+			button.price = Mathf.CeilToInt (button.price * Mathf.Pow (button.priceIncrease, button.level));
+		}
 	}
 }

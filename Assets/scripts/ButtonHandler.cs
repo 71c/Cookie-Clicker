@@ -36,7 +36,10 @@ public class ButtonHandler : MonoBehaviour
 		// set parent to element holder
 		buildingButtons.ElementAt(lastIndex).transform.SetParent(buttonElementHolders.ElementAt (lastIndex).transform, false);
 		buildingButtons.ElementAt (lastIndex).transform.localPosition = new Vector2 (0f, 0f);
-		
+
+		buildingButtons.ElementAt (lastIndex).isButtonVisible = false;
+
+
 
 		// add a text to buildingButtonLables
 		buildingButtonLabels.Add(Instantiate(text, transform.position, transform.rotation) as Text);
@@ -64,10 +67,12 @@ public class ButtonHandler : MonoBehaviour
 
 	void Start() {
 		float y = 4f;
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < names.Length; i++) {
 			addNewButton (286.7f, y * 52f);
 			y -= 1.605f;
 		}
+		buildingButtons[0].isButtonVisible = true;
+		buildingButtons[1].isButtonVisible = true;
 	}
 
 	void Update() {
@@ -75,20 +80,27 @@ public class ButtonHandler : MonoBehaviour
 
 			BuildingButton currentButton = buildingButtons[i];
 
-			if (gameStats.score >= currentButton.price && !currentButton.isVisible) {
-				currentButton.isVisible = true;
+			if (gameStats.score >= currentButton.price && !currentButton.isNameVisible) {
+				currentButton.isNameVisible = true;
+				currentButton.isButtonVisible = true;
+				buildingButtons [i + 1].isButtonVisible = true;
+				buildingButtons [i + 2].isButtonVisible = true;
 			}
-			currentButton.renderer.enabled = currentButton.isVisible;
 
-			buildingButtonLabels.ElementAt(i).text = names[i] + " (+" + buildingButtons[i].cookiesPerSecond + " CpS)\n" + buildingButtons[i].price + " cookies";
+			buttonElementHolders[i].gameObject.SetActive(currentButton.isButtonVisible);
 
-			buildingLevelTexts.ElementAt(i).text = buildingButtons[i].level + "";
+			if (currentButton.isNameVisible)
+				buildingButtonLabels[i].text = names [i] + " (+" + buildingButtons [i].cookiesPerSecond + " CpS)\n" + buildingButtons [i].price + " cookies";
+			else
+				buildingButtonLabels[i].text = "??\n" + buildingButtons [i].price + " cookies";
+
+			buildingLevelTexts.ElementAt(i).text = buildingButtons[i].level == 0 ? "" : buildingButtons[i].level + "";
 
 			if (gameStats.score >= buildingButtons.ElementAt (i).price) {
-				buildingButtons.ElementAt (i).GetComponent<Image> ().color = new Color (0.7f, 0.7f, 0.7f);
+				buildingButtons[i].GetComponent<Image> ().color = new Color (0.7f, 0.7f, 0.7f);
 				buildingButtonLabels.ElementAt (i).color = Color.white;
 			} else {
-				buildingButtons.ElementAt (i).GetComponent<Image> ().color = Color.gray;
+				buildingButtons[i].GetComponent<Image> ().color = Color.gray;
 				buildingButtonLabels.ElementAt (i).color = new Color (0.7f, 0.7f, 0.7f);
 			}
 		}

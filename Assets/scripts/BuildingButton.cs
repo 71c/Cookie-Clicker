@@ -14,4 +14,7 @@ public class BuildingButton : MonoBehaviour {
 	public float price;
 	public float cookiesPerSecond;
 
+	public bool isButtonVisible;
+	public bool isNameVisible;
+
 }

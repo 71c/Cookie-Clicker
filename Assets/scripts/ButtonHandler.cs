@@ -22,68 +22,64 @@ public class ButtonHandler : MonoBehaviour
 	float[] prices = new float[] { 15, 100, 1100, 12000, 130000, 1400000 };
 	float[] baseCookiesPerSeconds = new float[] { 0.1f, 1f, 8f, 47f, 260f, 1400f };
 
+	void addNewButton(float x, float y) {
+		int lastIndex = buildingButtons.Count;
 
+		buttonElementHolders.Add (new GameObject ());
+		buttonElementHolders.ElementAt (lastIndex).transform.SetParent (renderCanvas.transform, false);
+		buttonElementHolders.ElementAt (lastIndex).transform.localPosition = new Vector2(x, y);
+
+		// make button, add it to buildingButtons
+		createButton (names [lastIndex], prices [lastIndex], baseCookiesPerSeconds [lastIndex]);
+		buildingButtons.Add((BuildingButton)Instantiate(button, transform.position, transform.rotation));
+
+		// set parent to element holder
+		buildingButtons.ElementAt(lastIndex).transform.SetParent(buttonElementHolders.ElementAt (lastIndex).transform, false);
+		buildingButtons.ElementAt (lastIndex).transform.localPosition = new Vector2 (0f, 0f);
+		
+
+		// add a text to buildingButtonLables
+		buildingButtonLabels.Add(Instantiate(text, transform.position, transform.rotation) as Text);
+		// set parent to element holder
+		buildingButtonLabels.ElementAt(lastIndex).transform.SetParent(buildingButtons.ElementAt (lastIndex).transform, false);
+		// set the text to "??"
+		setText (buildingButtonLabels.ElementAt (lastIndex), "??", 18);
+		// set position
+		buildingButtonLabels.ElementAt(lastIndex).transform.localPosition = new Vector2(0f, 0f);
+		// set color
+		buildingButtonLabels.ElementAt(lastIndex).color = Color.white;
+
+
+		// add a text to buildingLevelTexts
+		buildingLevelTexts.Add(Instantiate(text, transform.position, transform.rotation) as Text);
+		// set text to "TEST"
+		setText (buildingLevelTexts.ElementAt (lastIndex), "0", 36);
+		// set parent to element holder
+		buildingLevelTexts.ElementAt(lastIndex).transform.SetParent(buttonElementHolders.ElementAt (lastIndex).transform, false);
+		// set position
+		buildingLevelTexts.ElementAt(lastIndex).transform.localPosition = new Vector2(120f, 0f);
+		// set color
+		buildingLevelTexts.ElementAt(lastIndex).color = Color.white;
+	}
 
 	void Start() {
-
-		for (float y = 3.45f; y > -4.3f; y -= 2.14f) {
-			int lastIndex = buildingButtons.Count;
-
-
-
-
-			buttonElementHolders.Add (new GameObject ());
-			buttonElementHolders.ElementAt (lastIndex).transform.SetParent (renderCanvas.transform, false);
-			buttonElementHolders.ElementAt (lastIndex).transform.localPosition = new Vector2(286.7f, y * 52f);
-
-
-			// make button, add it to buildingButtons
-			createButton (names [lastIndex], prices [lastIndex], baseCookiesPerSeconds [lastIndex]);
-			buildingButtons.Add((BuildingButton)Instantiate(button, transform.position, transform.rotation));
-
-			// set parent to element holder
-			buildingButtons.ElementAt(lastIndex).transform.SetParent(buttonElementHolders.ElementAt (lastIndex).transform, false);
-			buildingButtons.ElementAt (lastIndex).transform.localPosition = new Vector2 (0f, 0f);
-
-
-
-
-			// add a text to buildingButtonLables
-			buildingButtonLabels.Add(Instantiate(text, transform.position, transform.rotation) as Text);
-
-			// set parent to element holder
-			buildingButtonLabels.ElementAt(lastIndex).transform.SetParent(buildingButtons.ElementAt (lastIndex).transform, false);
-
-			// set the text to ""
-			setText (buildingButtonLabels.ElementAt (lastIndex), "", 18);
-
-			// set position
-			buildingButtonLabels.ElementAt(lastIndex).transform.localPosition = new Vector2(0f, 0f);
-
-			buildingButtonLabels.ElementAt(lastIndex).color = Color.white;
-
-
-
-			// add a text to buildingLevelTexts
-			buildingLevelTexts.Add(Instantiate(text, transform.position, transform.rotation) as Text);
-
-			// set text to "TEST"
-			setText (buildingLevelTexts.ElementAt (lastIndex), "0", 36);
-
-			// set parent to element holder
-			buildingLevelTexts.ElementAt(lastIndex).transform.SetParent(buttonElementHolders.ElementAt (lastIndex).transform, false);
-
-//			// set position
-			buildingLevelTexts.ElementAt(lastIndex).transform.localPosition = new Vector2(120f, 0f);
-
-			// set color
-			buildingLevelTexts.ElementAt(lastIndex).color = Color.white;
-
+		float y = 4f;
+		for (int i = 0; i < 2; i++) {
+			addNewButton (286.7f, y * 52f);
+			y -= 1.605f;
 		}
 	}
 
 	void Update() {
 		for (int i = 0; i < buildingButtonLabels.Count; i++) {
+
+			BuildingButton currentButton = buildingButtons[i];
+
+			if (gameStats.score >= currentButton.price && !currentButton.isVisible) {
+				currentButton.isVisible = true;
+			}
+			currentButton.renderer.enabled = currentButton.isVisible;
+
 			buildingButtonLabels.ElementAt(i).text = names[i] + " (+" + buildingButtons[i].cookiesPerSecond + " CpS)\n" + buildingButtons[i].price + " cookies";
 
 			buildingLevelTexts.ElementAt(i).text = buildingButtons[i].level + "";

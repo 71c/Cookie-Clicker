@@ -1,11 +1,11 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/ButtonHandler.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/GameStats.cs">
     <Files>
+      <File FileName="Assets/scripts/Cookie.cs" Line="1" Column="1" />
       <File FileName="Assets/scripts/BuildingButton.cs" Line="6" Column="46" />
-      <File FileName="Assets/scripts/ButtonHandler.cs" Line="95" Column="77" />
-      <File FileName="Assets/scripts/GameStats.cs" Line="20" Column="55" />
-      <File FileName="Assets/scripts/Cookie.cs" Line="75" Column="28" />
+      <File FileName="Assets/scripts/ButtonHandler.cs" Line="122" Column="2" />
+      <File FileName="Assets/scripts/GameStats.cs" Line="26" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

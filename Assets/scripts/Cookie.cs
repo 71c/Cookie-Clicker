@@ -13,14 +13,19 @@ public class Cookie : MonoBehaviour {
 	public float sizeDesired = 1f;
 	public float size = 1f;
 
-	public bool wobbleOn; // TODO: wobble
+	public bool wobbleOn; // TODO: wobble on/off
 
 	public float sine;
 	public float envelope = 0f;
 
 	public float actualSize;
 
-	public float envelopeIncrement = 0.02f;
+	public float envelopeIncrement = 0.055f; // it seems that this number doesn't matter
+
+//	public float envelopeEndSpeed = 0.8f; // 0.067f; // 0.05525f; // 0.0435f; // 0.02f; // 0.067f;
+	public float envelopeEndMultiply = 0.875f;
+
+	public float period = 1.25f;
 
 //	float sineStartingFramecount; // TODO maybe if i somehow get the game good enough for me to need to worry about that
 
@@ -60,8 +65,10 @@ public class Cookie : MonoBehaviour {
 	}
 
 	void Update() {
-		envelope = Mathf.Clamp(envelope - 0.067f * envelopeIncrement, 0f, envelopeIncrement);
-		sine = Mathf.Sin (Time.frameCount / 1f) * envelope;
+//		envelope = Mathf.Clamp(envelope - envelopeEndSpeed * envelopeIncrement, 0f, envelopeIncrement);
+		envelope = Mathf.Clamp(envelope * envelopeEndMultiply, 0f, envelopeIncrement);
+
+		sine = Mathf.Sin (Time.frameCount / period) * envelope;
 		size = sizeDesired * 0.6f + size * 0.4f;
 		actualSize = scale * (size + sine);
 		transform.localScale = new Vector2 (actualSize, actualSize);

@@ -20,14 +20,14 @@ public class Cookie : MonoBehaviour {
 
 	public float actualSize;
 
-	public float envelopeIncrement = 0.055f; // it seems that this number doesn't matter
+	public float envelopeIncrement = 0.055f;
 
 //	public float envelopeEndSpeed = 0.8f; // 0.067f; // 0.05525f; // 0.0435f; // 0.02f; // 0.067f;
-	public float envelopeEndMultiply = 0.875f;
+	public float envelopeEndMultiply = 0.9125f;
 
-	public float period = 1.25f;
+	public float period = 0.04375f;
 
-//	float sineStartingFramecount; // TODO maybe if i somehow get the game good enough for me to need to worry about that
+	float sineStart = 0f; // TODO maybe if i somehow get the game good enough for me to need to worry about that
 
 	public float scale;
 
@@ -42,15 +42,20 @@ public class Cookie : MonoBehaviour {
 	}
 
 	void OnMouseOver() { // while mouse on me
-		//		envelope += 1f;
+		float newSizeDesired;
 		if (Input.GetMouseButton (0)) {
 			if (onCookieClick)
-				sizeDesired = 1.04f;
+				newSizeDesired = 1.04f;
 			else
-				sizeDesired = 0.96f;
+				newSizeDesired = 0.98f;
 		} else {
-			sizeDesired = 1.1f;
+			newSizeDesired = 1.08f;
 		}
+		if (newSizeDesired != sizeDesired)
+			sineStart = Time.realtimeSinceStartup;
+		if (newSizeDesired < sizeDesired)
+			envelope = -Mathf.Abs (envelope);
+		sizeDesired = newSizeDesired;
 	}
 
 	void OnMouseExit() { // once when mouse leaves me
@@ -66,10 +71,10 @@ public class Cookie : MonoBehaviour {
 
 	void Update() {
 //		envelope = Mathf.Clamp(envelope - envelopeEndSpeed * envelopeIncrement, 0f, envelopeIncrement);
-		envelope = Mathf.Clamp(envelope * envelopeEndMultiply, 0f, envelopeIncrement);
+		envelope = Mathf.Clamp(envelope * Mathf.Pow(envelopeEndMultiply, Time.deltaTime / (1f / 50f)), -envelopeIncrement, envelopeIncrement);
 
-		sine = Mathf.Sin (Time.frameCount / period) * envelope;
-		size = sizeDesired * 0.6f + size * 0.4f;
+		sine = Mathf.Sin ((Time.realtimeSinceStartup - sineStart) / period) * envelope;
+		size = sizeDesired * 0.5f + size * 0.5f;
 		actualSize = scale * (size + sine);
 		transform.localScale = new Vector2 (actualSize, actualSize);
 	}

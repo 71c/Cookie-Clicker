@@ -31,14 +31,14 @@ public class Cookie : MonoBehaviour {
 
 	public float scale;
 
+	float expectedFrameRate = 50f;
+
 	void OnMouseDown() {
 		gameStats.score += gameStats.pointsPerClick;
-		incrementEnvelope ();
 	}
 
 	void OnMouseUp() {
 		onCookieClick = false;
-		incrementEnvelope ();
 	}
 
 	void OnMouseOver() { // while mouse on me
@@ -47,9 +47,9 @@ public class Cookie : MonoBehaviour {
 			if (onCookieClick)
 				newSizeDesired = 1.04f;
 			else
-				newSizeDesired = 0.98f;
+				newSizeDesired = 0.98f; // 0.98
 		} else {
-			newSizeDesired = 1.08f;
+			newSizeDesired = 1.067f; // 1.08f
 		}
 		if (newSizeDesired != sizeDesired)
 			sineStart = Time.realtimeSinceStartup;
@@ -59,28 +59,22 @@ public class Cookie : MonoBehaviour {
 	}
 
 	void OnMouseExit() { // once when mouse leaves me
-		incrementEnvelope();
 		if (Input.GetMouseButton (0))
 			onCookieClick = true;
 		sizeDesired = 1f;
 	}
 
-	void OnMouseEnter() { // once when mouse enters me
-		incrementEnvelope();
-	}
-
 	void Update() {
-//		envelope = Mathf.Clamp(envelope - envelopeEndSpeed * envelopeIncrement, 0f, envelopeIncrement);
-		envelope = Mathf.Clamp(envelope * Mathf.Pow(envelopeEndMultiply, Time.deltaTime / (1f / 50f)), -envelopeIncrement, envelopeIncrement);
+		float expectedFrames = Time.deltaTime * expectedFrameRate;
 
+		envelope = Mathf.Clamp(envelope * Mathf.Pow(envelopeEndMultiply, expectedFrames), -envelopeIncrement, envelopeIncrement);
+
+		float newSize = sizeDesired * 0.35f + size * 0.65f;
+		envelope += newSize - size;
 		sine = Mathf.Sin ((Time.realtimeSinceStartup - sineStart) / period) * envelope;
-		size = sizeDesired * 0.5f + size * 0.5f;
+		size = newSize;
 		actualSize = scale * (size + sine);
 		transform.localScale = new Vector2 (actualSize, actualSize);
-	}
-
-	void incrementEnvelope() {
-		envelope = envelopeIncrement;
 	}
 }
 

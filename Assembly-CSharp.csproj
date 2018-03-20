@@ -53,8 +53,10 @@
   <ItemGroup>
      <Compile Include="Assets\scripts\BuildingButton.cs" />
      <Compile Include="Assets\scripts\BuildingButtonHandler.cs" />
+     <Compile Include="Assets\scripts\BuildingUpgrade.cs" />
      <Compile Include="Assets\scripts\Cookie.cs" />
      <Compile Include="Assets\scripts\GameStats.cs" />
+     <Compile Include="Assets\scripts\UpgradeButton.cs" />
      <Compile Include="Assets\scripts\UpgradeButtonHandler.cs" />
      <None Include="Assets\test.txt" />
  <Reference Include="UnityEngine.UI">

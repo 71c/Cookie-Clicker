@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
 public class Cookie : MonoBehaviour {
 
@@ -13,25 +14,24 @@ public class Cookie : MonoBehaviour {
 	public float sizeDesired = 1f;
 	public float size = 1f;
 
-	public bool wobbleOn; // TODO: wobble on/off
+	public bool wobbleOn = true;
 
 	public float sine;
 	public float envelope = 0f;
 
 	public float actualSize;
 
-	public float envelopeIncrement = 0.055f;
-
-//	public float envelopeEndSpeed = 0.8f; // 0.067f; // 0.05525f; // 0.0435f; // 0.02f; // 0.067f;
 	public float envelopeEndMultiply = 0.9125f;
 
 	public float period = 0.04375f;
 
-	float sineStart = 0f; // TODO maybe if i somehow get the game good enough for me to need to worry about that
+	float sineStart = 0f;
 
 	public float scale;
 
 	float expectedFrameRate = 50f;
+
+	public float changeSpeed = 0.5f;
 
 	void OnMouseDown() {
 		gameStats.score += gameStats.pointsPerClick;
@@ -53,28 +53,31 @@ public class Cookie : MonoBehaviour {
 		}
 		if (newSizeDesired != sizeDesired)
 			sineStart = Time.realtimeSinceStartup;
-		if (newSizeDesired < sizeDesired)
-			envelope = -Mathf.Abs (envelope);
 		sizeDesired = newSizeDesired;
 	}
 
 	void OnMouseExit() { // once when mouse leaves me
 		if (Input.GetMouseButton (0))
 			onCookieClick = true;
-		sizeDesired = 1f;
+		sizeDesired = 1.01f;
 	}
 
 	void Update() {
 		float expectedFrames = Time.deltaTime * expectedFrameRate;
 
-		envelope = Mathf.Clamp(envelope * Mathf.Pow(envelopeEndMultiply, expectedFrames), -envelopeIncrement, envelopeIncrement);
+		envelope = envelope * Mathf.Pow(envelopeEndMultiply, expectedFrames);
 
-		float newSize = sizeDesired * 0.35f + size * 0.65f;
+		float newSize = sizeDesired * changeSpeed + size * (1 - changeSpeed);
 		envelope += newSize - size;
 		sine = Mathf.Sin ((Time.realtimeSinceStartup - sineStart) / period) * envelope;
 		size = newSize;
-		actualSize = scale * (size + sine);
+		actualSize = scale * (size + (wobbleOn ? sine : 0f));
 		transform.localScale = new Vector2 (actualSize, actualSize);
+
+
+//		StreamWriter writer = new StreamWriter("Assets/test.txt", true);
+//		writer.WriteLine(Time.frameCount + ", " + size);
+//		writer.Close();
 	}
 }
 

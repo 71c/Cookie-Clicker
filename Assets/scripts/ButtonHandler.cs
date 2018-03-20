@@ -83,8 +83,10 @@ public class ButtonHandler : MonoBehaviour
 			if (gameStats.score >= currentButton.price && !currentButton.isNameVisible) {
 				currentButton.isNameVisible = true;
 				currentButton.isButtonVisible = true;
-				buildingButtons [i + 1].isButtonVisible = true;
-				buildingButtons [i + 2].isButtonVisible = true;
+				if (i + 1 < buildingButtons.Count)
+					buildingButtons [i + 1].isButtonVisible = true;
+				if (i + 2 < buildingButtons.Count)
+					buildingButtons [i + 2].isButtonVisible = true;
 			}
 
 			buttonElementHolders[i].gameObject.SetActive(currentButton.isButtonVisible);

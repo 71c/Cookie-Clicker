@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.EventSystems;
-public class ButtonHandler : MonoBehaviour
+public class BuildingButtonHandler : MonoBehaviour
 {
 	public BuildingButton button;
 	public Text text;
@@ -14,7 +14,6 @@ public class ButtonHandler : MonoBehaviour
 
 	public List<Text> buildingButtonLabels = new List<Text> ();
 	public List<Text> buildingLevelTexts = new List<Text> ();
-
 
 	public GameStats gameStats;
 
@@ -119,9 +118,7 @@ public class ButtonHandler : MonoBehaviour
 		textObject.text = words; //Set the text box's text element to the current textToDisplay:
 	}
 
-	public void TaskOnClick(BuildingButton button)
-	{
-		Debug.Log (button.myName);
+	public void TaskOnClick(BuildingButton button) {
 		if (gameStats.score >= button.price) {
 			gameStats.pointsPerSecond += button.cookiesPerSecond;
 			gameStats.score -= button.price;

@@ -126,4 +126,13 @@ public class BuildingButtonHandler : MonoBehaviour
 			button.price = Mathf.CeilToInt (button.price * Mathf.Pow (button.priceIncrease, button.level));
 		}
 	}
+
+
+	public BuildingButton findButtonWithName(string nameToFind) {
+		for (int i = 0; i < buildingButtons.Count; i++) {
+			if (buildingButtons [i].myName == nameToFind)
+				return buildingButtons [i];
+		}
+		return null;
+	}
 }

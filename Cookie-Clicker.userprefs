@@ -1,14 +1,15 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/UpgradeButtonHandler.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/TEST.cs">
     <Files>
-      <File FileName="Assets/scripts/UpgradeButtonHandler.cs" Line="71" Column="4" />
-      <File FileName="Assets/scripts/BuildingButtonHandler.cs" Line="13" Column="73" />
-      <File FileName="Assets/scripts/Cookie.cs" Line="37" Column="39" />
-      <File FileName="Assets/scripts/GameStats.cs" Line="50" Column="3" />
-      <File FileName="Assets/scripts/BuildingButton.cs" Line="23" Column="19" />
-      <File FileName="Assets/scripts/BuildingUpgrade.cs" Line="12" Column="2" />
-      <File FileName="Assets/scripts/UpgradeButton.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/UpgradeButtonHandler.cs" Line="75" Column="101" />
+      <File FileName="Assets/scripts/BuildingButtonHandler.cs" Line="106" Column="12" />
+      <File FileName="Assets/scripts/Cookie.cs" Line="46" Column="25" />
+      <File FileName="Assets/scripts/GameStats.cs" Line="28" Column="22" />
+      <File FileName="Assets/scripts/BuildingButton.cs" Line="14" Column="19" />
+      <File FileName="Assets/scripts/BuildingUpgrade.cs" Line="5" Column="25" />
+      <File FileName="Assets/scripts/UpgradeButton.cs" Line="6" Column="45" />
+      <File FileName="Assets/scripts/TEST.cs" Line="28" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

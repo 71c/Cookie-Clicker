@@ -10,12 +10,12 @@ public class GameStats : MonoBehaviour {
 
 	private System.Threading.Timer timer;
 
-	public float cookies = 0;
+	public int cookies = 0;
 
 	public float cookiesPerClick = 1;
 	public float cookiesPerClickMultiplier = 1f;
 	public float cookiesPerClickAddOn = 0f;
-	public float totalCookiesPerClick;
+	public float cookiesPerClickTotal;
 
 	public float cookiesPerSecond = 0f;
 	float oldCookiesPerSecond = 0f;
@@ -25,18 +25,18 @@ public class GameStats : MonoBehaviour {
 		timer = new System.Threading.Timer (UpdateProperty);
 
 		// TESTING
-		cookies = 100000;
+//		cookies = 100000;
 	}
 
 	private void UpdateProperty(object state) {
 		lock(this) {
-			cookies += 1f;
+			cookies += 1;
 		}
 	}
 
 	void Update () {
-		if (totalCookiesPerClick != cookiesPerClick * cookiesPerClickMultiplier + cookiesPerClickAddOn) {
-			totalCookiesPerClick = cookiesPerClick * cookiesPerClickMultiplier + cookiesPerClickAddOn;
+		if (cookiesPerClickTotal != cookiesPerClick * cookiesPerClickMultiplier + cookiesPerClickAddOn) {
+			cookiesPerClickTotal = cookiesPerClick * cookiesPerClickMultiplier + cookiesPerClickAddOn;
 		}
 
 		

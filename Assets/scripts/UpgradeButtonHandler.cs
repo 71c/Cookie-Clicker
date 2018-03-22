@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 public class UpgradeButtonHandler : MonoBehaviour {
@@ -48,12 +49,10 @@ public class UpgradeButtonHandler : MonoBehaviour {
 			upgradeButtons [i] = (UpgradeButton)Instantiate (upgradeButton, transform.position, transform.rotation);
 			upgradeButtons [i].transform.SetParent (buttonElementHolders [i].transform, false);
 			upgradeButtons [i].transform.localPosition = new Vector2(0f, 0f);
-			upgradeButtons [i].upgrade = upgrades [i];
 
 			buttonTexts[i] = Instantiate (text, transform.position, transform.rotation);
 			buttonTexts[i].transform.SetParent (upgradeButtons [i].transform, false);
 			buttonTexts[i].transform.localPosition = new Vector2(0f, 0f);
-			buttonTexts[i].text = upgrades[i].name;
 
 			y -= 83.46f;
 		}
@@ -66,14 +65,32 @@ public class UpgradeButtonHandler : MonoBehaviour {
 
 			updateCursorUpgradeIfNeeded (upgrade);
 
-			if (buildingButtonHandler.findButtonWithName (upgrade.upgradeType).count >= Convert.ToInt64 (upgrade.quantityNeeded))
+			if (buildingButtonHandler.findButtonWithName (upgrade.upgradeType).count >= Convert.ToInt64 (upgrade.quantityNeeded) && !upgrade.enabled)
 				upgradesNuffBuildings.Add (upgrade);
 		}
-
+		upgradesNuffBuildings = sortByPrice (upgradesNuffBuildings);
 		for (int i = 0; i < upgradeButtons.Length; i++) {
-			if (upgradesNuffBuildings.Count > 0)
-				upgradeButtons [i].upgrade = upgradesNuffBuildings.Remove (upgradesNuffBuildings.Count);
+			buttonElementHolders[i].gameObject.SetActive(upgradesNuffBuildings.Count > 0);
+			if (upgradesNuffBuildings.Count > 0) {
+				// set the upgrade of the button to the last upgrade in the list and remove the upgrade from the list
+				upgradeButtons [i].upgrade = upgradesNuffBuildings [upgradesNuffBuildings.Count - 1];
+				upgradesNuffBuildings.RemoveAt (upgradesNuffBuildings.Count - 1);
+				buttonTexts [i].text = upgradeButtons [i].upgrade.name;
+
+				// set the color according to whether it is affordable or not
+				if (gameStats.cookies >= Convert.ToInt64 (upgradeButtons [i].upgrade.basePrice)) {
+					upgradeButtons [i].GetComponent<Image> ().color = new Color (0.7f, 0.7f, 0.7f);
+					buttonTexts [i].color = Color.white;
+				} else {
+					upgradeButtons [i].GetComponent<Image> ().color = Color.gray;
+					buttonTexts [i].color = new Color (0.7f, 0.7f, 0.7f);
+				}
+			}
 		}
+	}
+
+	List<BuildingUpgrade> sortByPrice(List<BuildingUpgrade> theList) {
+		return theList.OrderByDescending(upgrade => Convert.ToInt64 (upgrade.basePrice)).ToList();
 	}
 
 	void updateCursorUpgradeIfNeeded(BuildingUpgrade upgrade) {

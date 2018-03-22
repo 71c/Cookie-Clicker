@@ -11,7 +11,7 @@ public class BuildingButton : MonoBehaviour {
 	public int count = 0;
 
 	public string myName;
-	public float price;
+	public int price;
 	public float cookiesPerSecond;
 	public float cookiesPerSecondMultiplier = 1f;
 	public float cookiesPerSecondAddOn = 0f;

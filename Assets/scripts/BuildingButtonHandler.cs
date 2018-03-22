@@ -18,7 +18,7 @@ public class BuildingButtonHandler : MonoBehaviour
 	public GameStats gameStats;
 
 	string[] names = new string[] { "cursor", "grandma", "farm", "mine", "factory", "bank" };
-	float[] prices = new float[] { 15, 100, 1100, 12000, 130000, 1400000 };
+	int[] prices = new int[] { 15, 100, 1100, 12000, 130000, 1400000 };
 	float[] baseCookiesPerSeconds = new float[] { 0.1f, 1f, 8f, 47f, 260f, 1400f };
 
 	void addNewButton(float x, float y) {
@@ -74,7 +74,7 @@ public class BuildingButtonHandler : MonoBehaviour
 		buildingButtons[1].isButtonVisible = true;
 
 		// TESTING
-		findButtonWithName ("cursor").count = 25;
+//		findButtonWithName ("cursor").count = 25;
 	}
 
 	void Update() {
@@ -112,7 +112,7 @@ public class BuildingButtonHandler : MonoBehaviour
 		refreshCookiesPerSecond ();
 	}
 
-	void createButton(string newName, float newPrice, float newCPS) {
+	void createButton(string newName, int newPrice, float newCPS) {
 		button.myName = newName;
 		button.price = newPrice;
 		button.cookiesPerSecond = newCPS;
@@ -120,8 +120,8 @@ public class BuildingButtonHandler : MonoBehaviour
 	}
 
 	void setText(Text textObject, string words, int size) {
-		textObject.fontSize = size; //Set the text box's text element font size and style:
-		textObject.text = words; //Set the text box's text element to the current textToDisplay:
+		textObject.fontSize = size; //Set the text box's text element font size and style
+		textObject.text = words; //Set the text box's text element to the current textToDisplay
 	}
 
 	public void TaskOnClick(BuildingButton button) {

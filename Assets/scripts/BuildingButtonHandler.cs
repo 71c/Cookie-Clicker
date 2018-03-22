@@ -72,6 +72,9 @@ public class BuildingButtonHandler : MonoBehaviour
 		}
 		buildingButtons[0].isButtonVisible = true;
 		buildingButtons[1].isButtonVisible = true;
+
+		// TESTING
+		findButtonWithName ("cursor").count = 25;
 	}
 
 	void Update() {
@@ -79,7 +82,7 @@ public class BuildingButtonHandler : MonoBehaviour
 
 			BuildingButton currentButton = buildingButtons[i];
 
-			if (gameStats.score >= currentButton.price && !currentButton.isNameVisible) {
+			if (gameStats.cookies >= currentButton.price && !currentButton.isNameVisible) {
 				currentButton.isNameVisible = true;
 				currentButton.isButtonVisible = true;
 				if (i + 1 < buildingButtons.Count)
@@ -95,9 +98,9 @@ public class BuildingButtonHandler : MonoBehaviour
 			else
 				buildingButtonLabels[i].text = "??\n" + buildingButtons [i].price + " cookies";
 
-			buildingLevelTexts.ElementAt(i).text = buildingButtons[i].level == 0 ? "" : buildingButtons[i].level + "";
+			buildingLevelTexts.ElementAt(i).text = buildingButtons[i].count == 0 ? "" : buildingButtons[i].count + "";
 
-			if (gameStats.score >= buildingButtons.ElementAt (i).price) {
+			if (gameStats.cookies >= buildingButtons.ElementAt (i).price) {
 				buildingButtons[i].GetComponent<Image> ().color = new Color (0.7f, 0.7f, 0.7f);
 				buildingButtonLabels.ElementAt (i).color = Color.white;
 			} else {
@@ -105,12 +108,15 @@ public class BuildingButtonHandler : MonoBehaviour
 				buildingButtonLabels.ElementAt (i).color = new Color (0.7f, 0.7f, 0.7f);
 			}
 		}
+
+		refreshCookiesPerSecond ();
 	}
 
 	void createButton(string newName, float newPrice, float newCPS) {
 		button.myName = newName;
 		button.price = newPrice;
 		button.cookiesPerSecond = newCPS;
+		button.cookiesPerSecondMultiplier = 1f;
 	}
 
 	void setText(Text textObject, string words, int size) {
@@ -119,11 +125,11 @@ public class BuildingButtonHandler : MonoBehaviour
 	}
 
 	public void TaskOnClick(BuildingButton button) {
-		if (gameStats.score >= button.price) {
-			gameStats.pointsPerSecond += button.cookiesPerSecond;
-			gameStats.score -= button.price;
-			button.level++;
-			button.price = Mathf.CeilToInt (button.price * Mathf.Pow (button.priceIncrease, button.level));
+		if (gameStats.cookies >= button.price) {
+			gameStats.cookiesPerSecond += button.cookiesPerSecond;
+			gameStats.cookies -= button.price;
+			button.count++;
+			button.price = Mathf.CeilToInt (button.price * Mathf.Pow (button.priceIncrease, button.count));
 		}
 	}
 
@@ -134,5 +140,19 @@ public class BuildingButtonHandler : MonoBehaviour
 				return buildingButtons [i];
 		}
 		return null;
+	}
+
+	public void refreshCookiesPerSecond() {
+		float cookiesPerSecond = 0f;
+		for (int i = 0; i < buildingButtons.Count; i++)
+			cookiesPerSecond += buildingButtons [i].getTotalCookiesPerSecond ();
+		gameStats.cookiesPerSecond = cookiesPerSecond;
+	}
+
+	public int getNumberOfBuildings() {
+		int buildingCount = 0;
+		for (int i = 0; i < buildingButtons.Count; i++)
+			buildingCount += buildingButtons[i].count;
+		return buildingCount;
 	}
 }

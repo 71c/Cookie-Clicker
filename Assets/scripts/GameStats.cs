@@ -5,34 +5,47 @@ using UnityEngine.UI;
 
 public class GameStats : MonoBehaviour {
 
-	public Text scoreText;
-	public Text pointsPerSecondText;
+	public Text cookiesText;
+	public Text cookiesPerSecondText;
 
 	private System.Threading.Timer timer;
 
-	public float score = 0;
-	public int pointsPerClick = 1;
-	public float pointsPerSecond = 0f;
-	float oldPoinstPerSecond = 0f;
+	public float cookies = 0;
+
+	public float cookiesPerClick = 1;
+	public float cookiesPerClickMultiplier = 1f;
+	public float cookiesPerClickAddOn = 0f;
+	public float totalCookiesPerClick;
+
+	public float cookiesPerSecond = 0f;
+	float oldCookiesPerSecond = 0f;
 
 
 	void Start () {
 		timer = new System.Threading.Timer (UpdateProperty);
+
+		// TESTING
+		cookies = 100000;
 	}
 
 	private void UpdateProperty(object state) {
 		lock(this) {
-			score += 1f;
+			cookies += 1f;
 		}
 	}
 
 	void Update () {
-		scoreText.text = "Cookies: " + score;
-		pointsPerSecondText.text = "CpS: " + pointsPerSecond;
+		if (totalCookiesPerClick != cookiesPerClick * cookiesPerClickMultiplier + cookiesPerClickAddOn) {
+			totalCookiesPerClick = cookiesPerClick * cookiesPerClickMultiplier + cookiesPerClickAddOn;
+		}
 
-		if (oldPoinstPerSecond != pointsPerSecond && pointsPerSecond != 0f) {
-			timer.Change ((int)(1000f / pointsPerSecond), (int)(1000f / pointsPerSecond));
-			oldPoinstPerSecond = pointsPerSecond;
+		
+		cookiesText.text = "Cookies: " + cookies;
+		cookiesPerSecondText.text = "CpS: " + cookiesPerSecond;
+
+		if (oldCookiesPerSecond != cookiesPerSecond && cookiesPerSecond != 0f) {
+			timer.Change ((int)(1000f / cookiesPerSecond), (int)(1000f / cookiesPerSecond));
+			oldCookiesPerSecond = cookiesPerSecond;
 		}
 	}
 }

@@ -10,7 +10,8 @@ public class GameStats : MonoBehaviour {
 
 	private System.Threading.Timer timer;
 
-	public int cookies = 0;
+	public long cookies = 0;
+	public float cookiesFloat = 0f;
 
 	public float cookiesPerClick = 1;
 	public float cookiesPerClickMultiplier = 1f;
@@ -20,21 +21,27 @@ public class GameStats : MonoBehaviour {
 	public float cookiesPerSecond = 0f;
 	float oldCookiesPerSecond = 0f;
 
+	float cookieAdd = 0f;
+
+	int cookieAddPeriod = 25; // time between cookies updates in milliseconds
 
 	void Start () {
 		timer = new System.Threading.Timer (UpdateProperty);
+		timer.Change (cookieAddPeriod, cookieAddPeriod);
 
 		// TESTING
-//		cookies = 100000;
+		cookiesFloat = 1000000f;
 	}
 
 	private void UpdateProperty(object state) {
 		lock(this) {
-			cookies += 1;
+			cookiesFloat += cookieAdd;
 		}
 	}
 
 	void Update () {
+		cookies = (int) (cookiesFloat + 0.5f);
+
 		if (cookiesPerClickTotal != cookiesPerClick * cookiesPerClickMultiplier + cookiesPerClickAddOn) {
 			cookiesPerClickTotal = cookiesPerClick * cookiesPerClickMultiplier + cookiesPerClickAddOn;
 		}
@@ -44,7 +51,7 @@ public class GameStats : MonoBehaviour {
 		cookiesPerSecondText.text = "CpS: " + cookiesPerSecond;
 
 		if (oldCookiesPerSecond != cookiesPerSecond && cookiesPerSecond != 0f) {
-			timer.Change ((int)(1000f / cookiesPerSecond), (int)(1000f / cookiesPerSecond));
+			cookieAdd = cookiesPerSecond / (1000f / cookieAddPeriod);
 			oldCookiesPerSecond = cookiesPerSecond;
 		}
 	}

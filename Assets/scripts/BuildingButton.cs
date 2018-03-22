@@ -19,7 +19,11 @@ public class BuildingButton : MonoBehaviour {
 	public bool isButtonVisible;
 	public bool isNameVisible;
 
+	public float getTotalCookiesPerSecondCombined() {
+		return count * getTotalCookiesPerSecond();
+	}
+
 	public float getTotalCookiesPerSecond() {
-		return count * (cookiesPerSecond * cookiesPerSecondMultiplier + cookiesPerSecondAddOn);
+		return cookiesPerSecond * cookiesPerSecondMultiplier + cookiesPerSecondAddOn;
 	}
 }

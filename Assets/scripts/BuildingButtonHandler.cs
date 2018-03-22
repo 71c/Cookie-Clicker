@@ -94,7 +94,7 @@ public class BuildingButtonHandler : MonoBehaviour
 			buttonElementHolders[i].gameObject.SetActive(currentButton.isButtonVisible);
 
 			if (currentButton.isNameVisible)
-				buildingButtonLabels[i].text = names [i] + " (+" + buildingButtons [i].cookiesPerSecond + " CpS)\n" + buildingButtons [i].price + " cookies";
+				buildingButtonLabels[i].text = names [i] + " (+" + buildingButtons [i].getTotalCookiesPerSecond() + " CpS)\n" + buildingButtons [i].price + " cookies";
 			else
 				buildingButtonLabels[i].text = "??\n" + buildingButtons [i].price + " cookies";
 
@@ -129,7 +129,7 @@ public class BuildingButtonHandler : MonoBehaviour
 			gameStats.cookiesPerSecond += button.cookiesPerSecond;
 			gameStats.cookies -= button.price;
 			button.count++;
-			button.price = Mathf.CeilToInt (button.price * Mathf.Pow (button.priceIncrease, button.count));
+			button.price = Mathf.CeilToInt (button.price * button.priceIncrease);
 		}
 	}
 
@@ -145,7 +145,7 @@ public class BuildingButtonHandler : MonoBehaviour
 	public void refreshCookiesPerSecond() {
 		float cookiesPerSecond = 0f;
 		for (int i = 0; i < buildingButtons.Count; i++)
-			cookiesPerSecond += buildingButtons [i].getTotalCookiesPerSecond ();
+			cookiesPerSecond += buildingButtons [i].getTotalCookiesPerSecondCombined ();
 		gameStats.cookiesPerSecond = cookiesPerSecond;
 	}
 

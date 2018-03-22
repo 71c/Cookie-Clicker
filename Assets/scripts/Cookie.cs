@@ -34,7 +34,7 @@ public class Cookie : MonoBehaviour {
 	public float changeSpeed = 0.5f;
 
 	void OnMouseDown() {
-		gameStats.cookies += Mathf.CeilToInt(gameStats.cookiesPerClickTotal);
+		gameStats.cookiesFloat += gameStats.cookiesPerClickTotal;
 	}
 
 	void OnMouseUp() {

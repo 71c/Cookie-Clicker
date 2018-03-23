@@ -11,19 +11,19 @@ public class BuildingButton : MonoBehaviour {
 	public int count = 0;
 
 	public string myName;
-	public int price;
-	public float cookiesPerSecond;
-	public float cookiesPerSecondMultiplier = 1f;
-	public float cookiesPerSecondAddOn = 0f;
+	public long price;
+	public double cookiesPerSecond;
+	public double cookiesPerSecondMultiplier = 1.0;
+	public double cookiesPerSecondAddOn = 0.0;
 
 	public bool isButtonVisible;
 	public bool isNameVisible;
 
-	public float getTotalCookiesPerSecondCombined() {
+	public double getTotalCookiesPerSecondCombined() {
 		return count * getTotalCookiesPerSecond();
 	}
 
-	public float getTotalCookiesPerSecond() {
+	public double getTotalCookiesPerSecond() {
 		return cookiesPerSecond * cookiesPerSecondMultiplier + cookiesPerSecondAddOn;
 	}
 }

@@ -17,9 +17,9 @@ public class BuildingButtonHandler : MonoBehaviour
 
 	public GameStats gameStats;
 
-	string[] names = new string[] { "cursor", "grandma", "farm", "mine", "factory", "bank" };
-	int[] prices = new int[] { 15, 100, 1100, 12000, 130000, 1400000 };
-	float[] baseCookiesPerSeconds = new float[] { 0.1f, 1f, 8f, 47f, 260f, 1400f };
+	string[] names = new string[] { "cursor", "grandma", "farm", "mine", "factory", "bank", "temple", "wizard tower" };
+	int[] prices = new int[] { 15, 100, 1100, 12000, 130000, 1400000, 20000000, 330000000 };
+	float[] baseCookiesPerSeconds = new float[] { 0.1f, 1f, 8f, 47f, 260f, 1400f, 7800f, 44000f };
 
 	void addNewButton(float x, float y) {
 		int lastIndex = buildingButtons.Count;
@@ -68,7 +68,8 @@ public class BuildingButtonHandler : MonoBehaviour
 		float y = 4f;
 		for (int i = 0; i < names.Length; i++) {
 			addNewButton (286.7f, y * 52f);
-			y -= 1.605f;
+//			y -= 1.605f;
+			y -= 1.2f;
 		}
 		buildingButtons[0].isButtonVisible = true;
 		buildingButtons[1].isButtonVisible = true;
@@ -127,7 +128,7 @@ public class BuildingButtonHandler : MonoBehaviour
 	public void TaskOnClick(BuildingButton button) {
 		if (gameStats.cookies >= button.price) {
 			gameStats.cookiesPerSecond += button.cookiesPerSecond;
-			gameStats.cookies -= button.price;
+			gameStats.cookiesDouble -= button.price;
 			button.count++;
 			button.price = Mathf.CeilToInt (button.price * button.priceIncrease);
 		}
@@ -143,7 +144,7 @@ public class BuildingButtonHandler : MonoBehaviour
 	}
 
 	public void refreshCookiesPerSecond() {
-		float cookiesPerSecond = 0f;
+		double cookiesPerSecond = 0.0;
 		for (int i = 0; i < buildingButtons.Count; i++)
 			cookiesPerSecond += buildingButtons [i].getTotalCookiesPerSecondCombined ();
 		gameStats.cookiesPerSecond = cookiesPerSecond;

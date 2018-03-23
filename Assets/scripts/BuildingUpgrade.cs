@@ -5,6 +5,7 @@ public class BuildingUpgrade {
 	public string basePrice; // was long
 	public string description;
 	public string upgradeType;
+	public string upgradeClass;
 
 	public float cookiesPerSecondAddOn = 0f;
 

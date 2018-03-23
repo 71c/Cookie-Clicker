@@ -34,7 +34,8 @@ public class Cookie : MonoBehaviour {
 	public float changeSpeed = 0.5f;
 
 	void OnMouseDown() {
-		gameStats.cookiesFloat += gameStats.cookiesPerClickTotal;
+		gameStats.cookiesDouble += gameStats.cookiesPerClickTotal;
+		gameStats.handmadeCookiesDouble += gameStats.cookiesPerClickTotal;
 	}
 
 	void OnMouseUp() {

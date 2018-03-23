@@ -10,18 +10,23 @@ public class GameStats : MonoBehaviour {
 
 	private System.Threading.Timer timer;
 
+	public double cookiesDouble = 0.0;
 	public long cookies = 0;
-	public float cookiesFloat = 0f;
+	public double handmadeCookiesDouble = 0.0;
+	public long handmadeCookies = 0;
 
-	public float cookiesPerClick = 1;
-	public float cookiesPerClickMultiplier = 1f;
-	public float cookiesPerClickAddOn = 0f;
-	public float cookiesPerClickTotal;
+	public double cookiesPerClick = 1;
+	public double cookiesPerClickMultiplier = 1.0;
+	public double cookiesPerClickAddOn = 0.0;
+	public double cookiesPerClickTotal;
 
-	public float cookiesPerSecond = 0f;
-	float oldCookiesPerSecond = 0f;
+	public double cookiesPerSecond = 0.0;
 
-	float cookieAdd = 0f;
+	public double cookiesPerSecondMultiplier = 1.0;
+	public double cookiesPerSecondTotal = 0.0;
+	double oldCookiesPerSecondTotal = 0.0;
+
+	double cookieAdd = 0.0;
 
 	int cookieAddPeriod = 25; // time between cookies updates in milliseconds
 
@@ -30,29 +35,32 @@ public class GameStats : MonoBehaviour {
 		timer.Change (cookieAddPeriod, cookieAddPeriod);
 
 		// TESTING
-		cookiesFloat = 1000000f;
+		cookiesDouble = 1000000000000000000.0;
 	}
 
 	private void UpdateProperty(object state) {
 		lock(this) {
-			cookiesFloat += cookieAdd;
+			cookiesDouble += cookieAdd;
 		}
 	}
 
 	void Update () {
-		cookies = (int) (cookiesFloat + 0.5f);
+		// these round to the nearest integer
+		cookies = (long) (cookiesDouble + 0.5);
+		handmadeCookies = (long) (handmadeCookiesDouble + 0.5);
 
 		if (cookiesPerClickTotal != cookiesPerClick * cookiesPerClickMultiplier + cookiesPerClickAddOn) {
 			cookiesPerClickTotal = cookiesPerClick * cookiesPerClickMultiplier + cookiesPerClickAddOn;
 		}
 
+		cookiesPerSecondTotal = cookiesPerSecond * cookiesPerSecondMultiplier;
 		
-		cookiesText.text = "Cookies: " + cookies;
-		cookiesPerSecondText.text = "CpS: " + cookiesPerSecond;
+		cookiesText.text = cookies.ToString("N0") + " cookies";
+		cookiesPerSecondText.text = "Per second: " + cookiesPerSecondTotal.ToString("N0");
 
-		if (oldCookiesPerSecond != cookiesPerSecond && cookiesPerSecond != 0f) {
-			cookieAdd = cookiesPerSecond / (1000f / cookieAddPeriod);
-			oldCookiesPerSecond = cookiesPerSecond;
+		if (oldCookiesPerSecondTotal != cookiesPerSecondTotal && cookiesPerSecondTotal != 0f) {
+			cookieAdd = cookiesPerSecondTotal / (1000f / cookieAddPeriod);
+			oldCookiesPerSecondTotal = cookiesPerSecondTotal;
 		}
 	}
 }

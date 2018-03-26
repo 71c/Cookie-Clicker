@@ -7,7 +7,7 @@ public class BuildingUpgrade {
 	public string upgradeType;
 	public string upgradeClass;
 
-	public float cookiesPerSecondAddOn = 0f;
+	public double cookiesPerSecondAddOn = 0.0;
 
 	public bool enabled = false;
 }

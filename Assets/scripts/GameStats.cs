@@ -10,57 +10,50 @@ public class GameStats : MonoBehaviour {
 
 	private System.Threading.Timer timer;
 
-	public double cookiesDouble = 0.0;
-	public long cookies = 0;
-	public double handmadeCookiesDouble = 0.0;
-	public long handmadeCookies = 0;
+	public decimal cookies = 0.0m;
+	public decimal handmadeCookies = 0.0m;
 
-	public double cookiesPerClick = 1;
-	public double cookiesPerClickMultiplier = 1.0;
-	public double cookiesPerClickAddOn = 0.0;
-	public double cookiesPerClickTotal;
+	public decimal cookiesPerClick = 1m;
+	public decimal cookiesPerClickMultiplier = 1.0m;
+	public decimal cookiesPerClickAddOn = 0.0m;
+	public decimal cookiesPerClickTotal;
 
-	public double cookiesPerSecond = 0.0;
+	public decimal cookiesPerSecond = 0.0m;
 
-	public double cookiesPerSecondMultiplier = 1.0;
-	public double cookiesPerSecondTotal = 0.0;
-	double oldCookiesPerSecondTotal = 0.0;
+	public decimal cookiesPerSecondMultiplier = 1.0m;
+	public decimal cookiesPerSecondTotal = 0.0m;
+	decimal oldCookiesPerSecondTotal = 0.0m;
 
-	double cookieAdd = 0.0;
+	public string handmadeCookiesString;
+	public string cookiesPerClickTotalString;
+
+	decimal cookieAdd = 0.0m;
 
 	int cookieAddPeriod = 25; // time between cookies updates in milliseconds
+
 
 	void Start () {
 		timer = new System.Threading.Timer (UpdateProperty);
 		timer.Change (cookieAddPeriod, cookieAddPeriod);
 
 		// TESTING
-		cookiesDouble = 1000000000000000000.0;
+		cookies = 10000000000.0m;
 	}
 
 	private void UpdateProperty(object state) {
 		lock(this) {
-			cookiesDouble += cookieAdd;
+//			cookieAdd = cookiesPerSecondTotal / (1000.0m / cookieAddPeriod);
+			cookies += cookiesPerSecondTotal / (1000.0m / cookieAddPeriod);
 		}
 	}
 
 	void Update () {
-		// these round to the nearest integer
-		cookies = (long) (cookiesDouble + 0.5);
-		handmadeCookies = (long) (handmadeCookiesDouble + 0.5);
-
-		if (cookiesPerClickTotal != cookiesPerClick * cookiesPerClickMultiplier + cookiesPerClickAddOn) {
-			cookiesPerClickTotal = cookiesPerClick * cookiesPerClickMultiplier + cookiesPerClickAddOn;
-		}
-
+		cookiesPerClickTotal = cookiesPerClick * cookiesPerClickMultiplier + cookiesPerClickAddOn;
 		cookiesPerSecondTotal = cookiesPerSecond * cookiesPerSecondMultiplier;
-		
-		cookiesText.text = cookies.ToString("N0") + " cookies";
-		cookiesPerSecondText.text = "Per second: " + cookiesPerSecondTotal.ToString("N0");
-
-		if (oldCookiesPerSecondTotal != cookiesPerSecondTotal && cookiesPerSecondTotal != 0f) {
-			cookieAdd = cookiesPerSecondTotal / (1000f / cookieAddPeriod);
-			oldCookiesPerSecondTotal = cookiesPerSecondTotal;
-		}
+		cookiesText.text = cookies.ToString("###,###0") + " cookies";
+		cookiesPerSecondText.text = "Per second: " + cookiesPerSecondTotal.ToString(cookiesPerSecondTotal == (int)cookiesPerSecondTotal ? "N0" : "N1");
+	
+		handmadeCookiesString = handmadeCookies.ToString ();
+		cookiesPerClickTotalString = cookiesPerClickTotal.ToString ();
 	}
 }

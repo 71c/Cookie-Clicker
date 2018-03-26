@@ -33,9 +33,13 @@ public class Cookie : MonoBehaviour {
 
 	public float changeSpeed = 0.5f;
 
+
+
+	public float sizeD = 0f;
+
 	void OnMouseDown() {
-		gameStats.cookiesDouble += gameStats.cookiesPerClickTotal;
-		gameStats.handmadeCookiesDouble += gameStats.cookiesPerClickTotal;
+		gameStats.cookies += gameStats.cookiesPerClickTotal;
+		gameStats.handmadeCookies += gameStats.cookiesPerClickTotal;
 	}
 
 	void OnMouseUp() {
@@ -43,15 +47,7 @@ public class Cookie : MonoBehaviour {
 	}
 
 	void OnMouseOver() { // while mouse on me
-		float newSizeDesired;
-		if (Input.GetMouseButton (0)) {
-			if (onCookieClick)
-				newSizeDesired = 1.04f;
-			else
-				newSizeDesired = 0.98f; // 0.98
-		} else {
-			newSizeDesired = 1.067f; // 1.08f
-		}
+		float newSizeDesired = Input.GetMouseButton (0) && !onCookieClick ? 0.98f : 1.05f;
 		if (newSizeDesired != sizeDesired)
 			sineStart = Time.realtimeSinceStartup;
 		sizeDesired = newSizeDesired;
@@ -60,7 +56,7 @@ public class Cookie : MonoBehaviour {
 	void OnMouseExit() { // once when mouse leaves me
 		if (Input.GetMouseButton (0))
 			onCookieClick = true;
-		sizeDesired = 1.01f;
+		sizeDesired = 1.0f;
 	}
 
 	void Update() {
@@ -75,11 +71,15 @@ public class Cookie : MonoBehaviour {
 		actualSize = scale * (size + (wobbleOn ? sine : 0f));
 		transform.localScale = new Vector2 (actualSize, actualSize);
 
-
-//		StreamWriter writer = new StreamWriter("Assets/test.txt", true);
-//		writer.WriteLine(Time.frameCount + ", " + size);
-//		writer.Close();
+		// this is orteil's method
+//		sizeD += (sizeDesired - size) * 0.75f;
+//		sizeD *= 0.75f;
+//		size += sizeD;
+//		size = Mathf.Max (0.1f, size);
+//		transform.localScale = new Vector2 (scale * size, scale * size);
 	}
 }
+
+
 
 // TODO: i used this for background: http://asbienestar.co/wood-floor-background-tumblr/wood-floor-background-tumblr-in-excellent-sek-woodbackground/

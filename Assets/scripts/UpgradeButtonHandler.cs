@@ -73,12 +73,17 @@ public class UpgradeButtonHandler : MonoBehaviour {
 		theThing = upgrade.quantityNeeded.Replace (" hand-made cookies", "");
 		bool c = upgrade.upgradeClass == "clicking upgrades" && theThing.Length < 20 && gameStats.handmadeCookies >= Convert.ToInt64 (theThing);
 
-		BuildingButton theBuilding = buildingButtonHandler.findButtonWithName (new Regex ("(?<=15 ).+(?=s and)").Match (upgrade.quantityNeeded).Groups [0].ToString ());
+		BuildingButton theBuilding = buildingForGrandmaType(upgrade);
 		bool d = upgrade.upgradeClass == "grandma types" && theBuilding != null && theBuilding.count >= 15 && buildingButtonHandler.findButtonWithName ("grandma").count >= 1;
 
 		bool e = upgrade.basePrice.Length < 20; // this shouldn't exist. temporary fix. the numbers get too big. also seen above.
 
 		return (a || b || c || d) && e;
+	}
+
+	BuildingButton buildingForGrandmaType(BuildingUpgrade upgrade) {
+		string result = new Regex ("(?<=15 ).+(?=s and)").Match (upgrade.quantityNeeded).Groups [0].ToString ();
+		return buildingButtonHandler.findButtonWithName (result == "Factorie" ? "factory" : result.ToLower());
 	}
 
 	void Update() {
@@ -87,12 +92,10 @@ public class UpgradeButtonHandler : MonoBehaviour {
 			BuildingUpgrade upgrade = upgrades[i];
 
 			updateCursorUpgradeIfNeeded (upgrade);
+			updateGrandmaTypeUpgradeIfNeeded (upgrade);
 
-			if (!upgrade.enabled) {
-				if (quantityMet(upgrade))
-					upgradesQuantityMet.Add (upgrade);
-			}
-
+			if (!upgrade.enabled && quantityMet(upgrade))
+				upgradesQuantityMet.Add (upgrade);
 		}
 		upgradesQuantityMet = sortByPrice (upgradesQuantityMet);
 		for (int i = 0; i < upgradeButtons.Length; i++) {
@@ -132,33 +135,49 @@ public class UpgradeButtonHandler : MonoBehaviour {
 				string description = upgrade.description;
 				string cookieGainPerNonCursorString = new Regex("(?<=\\+)(\\d|\\.)+(?= cookies)").Match(description).Groups[0].ToString();
 
-				float cookieGainPerNonCursor = (float) Convert.ToDouble (cookieGainPerNonCursorString);
+				double cookieGainPerNonCursor = Convert.ToDouble (cookieGainPerNonCursorString);
 
-				float cookiesGained = cookieGainPerNonCursor * totalNonCursors;
+				double cookiesGained = cookieGainPerNonCursor * totalNonCursors;
 
-				gameStats.cookiesPerClickAddOn -= upgrade.cookiesPerSecondAddOn;
+				gameStats.cookiesPerClickAddOn -= (decimal)upgrade.cookiesPerSecondAddOn;
 				buildingButtonHandler.findButtonWithName ("cursor").cookiesPerSecondAddOn -= upgrade.cookiesPerSecondAddOn;
 
 				upgrade.cookiesPerSecondAddOn = cookiesGained;
 
-				gameStats.cookiesPerClickAddOn += upgrade.cookiesPerSecondAddOn;
+				gameStats.cookiesPerClickAddOn += (decimal)upgrade.cookiesPerSecondAddOn;
 				buildingButtonHandler.findButtonWithName ("cursor").cookiesPerSecondAddOn += upgrade.cookiesPerSecondAddOn;
 			}
+		}
+	}
+
+	void updateGrandmaTypeUpgradeIfNeeded(BuildingUpgrade upgrade) {
+		if (upgrade.enabled && upgrade.upgradeType == "grandma types") {
+			string description = upgrade.description;
+			BuildingButton theBuilding = buildingForGrandmaType(upgrade);
+			double totalGrandmas = (double) buildingButtonHandler.findButtonWithName ("grandma").count;
+			double grandmasPerPercentCpsIncrease = theBuilding.myName == "farm" ? 1.0 : double.Parse (new Regex ("(?<=per ).+(?= grandmas)").Match (description).Groups [0].ToString () + ".0");
+			theBuilding.cookiesPerSecondAddOn = theBuilding.cookiesPerSecond * theBuilding.cookiesPerSecondMultiplier * 0.01 * totalGrandmas / grandmasPerPercentCpsIncrease;
+		}
+	}
+
+	void updateClickingUpgradeIfNeeded(BuildingUpgrade upgrade) {
+		if (upgrade.enabled && upgrade.upgradeType == "clicking upgrades") {
+//			float cookiesPerSecond = gameStats.cookiesPerSecond
 		}
 	}
 
 	public void TaskOnClick(UpgradeButton button) {
 		if (Convert.ToInt64 (button.upgrade.basePrice) <= gameStats.cookies && !button.upgrade.enabled && quantityMet(button.upgrade)) {
 			button.upgrade.enabled = true;
-			gameStats.cookiesDouble -= Convert.ToInt64 (button.upgrade.basePrice);
-			if (!(button.upgrade.upgradeType == "grandma types" || button.upgrade.upgradeType == "cursor") || button.upgrade.name == "Reinforced index finger" || button.upgrade.name == "Carpal tunnel prevention cream" || button.upgrade.name == "Ambidextrous") {
+			gameStats.cookies -= Convert.ToInt64 (button.upgrade.basePrice);
+			if (!(button.upgrade.upgradeType == "cursor" || button.upgrade.upgradeType == "clicking upgrades") || button.upgrade.name == "Reinforced index finger" || button.upgrade.name == "Carpal tunnel prevention cream" || button.upgrade.name == "Ambidextrous") {
 				if (button.upgrade.upgradeType == "flavored cookies") {
 					string description = button.upgrade.description;
-					string multiplierIncrease = new Regex("(?<=\\+)\\d+(?=%)").Match(description).Groups[0].ToString();
+					string multiplierIncrease = new Regex ("(?<=\\+)\\d+(?=%)").Match (description).Groups [0].ToString ();
 					print (multiplierIncrease);
-					gameStats.cookiesPerSecondMultiplier *= 1f + float.Parse(multiplierIncrease) / 100f;
+					gameStats.cookiesPerSecondMultiplier *= 1.0m + decimal.Parse (multiplierIncrease) / 100.0m;
 				} else {
-					buildingButtonHandler.findButtonWithName (button.upgrade.upgradeType).cookiesPerSecondMultiplier *= 2;
+					buildingButtonHandler.findButtonWithName (button.upgrade.upgradeType == "grandma types" ? "grandma" : button.upgrade.upgradeType).cookiesPerSecondMultiplier *= 2;
 				}
 				if (button.upgrade.upgradeType == "cursor")
 					gameStats.cookiesPerClickMultiplier *= 2;

@@ -4,16 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.EventSystems;
-public class BuildingButtonHandler : MonoBehaviour
-{
+public class BuildingButtonHandler : MonoBehaviour {
 	public BuildingButton button;
 	public Text text;
+	public Text popupText;
 	public Canvas renderCanvas;
 	public List<BuildingButton> buildingButtons = new List<BuildingButton>();
 	public List<GameObject> buttonElementHolders = new List<GameObject> ();
 
 	public List<Text> buildingButtonLabels = new List<Text> ();
 	public List<Text> buildingLevelTexts = new List<Text> ();
+	public List<Text> popupTexts = new List<Text> ();
 
 	public GameStats gameStats;
 
@@ -54,7 +55,7 @@ public class BuildingButtonHandler : MonoBehaviour
 
 		// add a text to buildingLevelTexts
 		buildingLevelTexts.Add(Instantiate(text, transform.position, transform.rotation) as Text);
-		// set text to "TEST"
+		// set text to "0"
 		setText (buildingLevelTexts.ElementAt (lastIndex), "0", 36);
 		// set parent to element holder
 		buildingLevelTexts.ElementAt(lastIndex).transform.SetParent(buttonElementHolders.ElementAt (lastIndex).transform, false);
@@ -62,6 +63,11 @@ public class BuildingButtonHandler : MonoBehaviour
 		buildingLevelTexts.ElementAt(lastIndex).transform.localPosition = new Vector2(120f, 0f);
 		// set color
 		buildingLevelTexts.ElementAt(lastIndex).color = Color.white;
+
+
+		popupTexts.Add (Instantiate(popupText, transform.position, transform.rotation) as Text);
+		popupTexts[lastIndex].transform.SetParent (buildingButtons [lastIndex].transform.GetChild(0).transform, false);
+		popupTexts[lastIndex].rectTransform.localPosition = new Vector2(0f, 0f);
 	}
 
 	void Start() {
@@ -94,10 +100,14 @@ public class BuildingButtonHandler : MonoBehaviour
 
 			buttonElementHolders[i].gameObject.SetActive(currentButton.isButtonVisible);
 
-			if (currentButton.isNameVisible)
-				buildingButtonLabels[i].text = names [i] + " (+" + buildingButtons [i].getTotalCookiesPerSecond() + " CpS)\n" + buildingButtons [i].price + " cookies";
-			else
-				buildingButtonLabels[i].text = "??\n" + buildingButtons [i].price + " cookies";
+			if (currentButton.isNameVisible) {
+				buildingButtonLabels [i].text = names [i] + "\n" + currentButton.price.ToString("N0") + " cookies";
+				popupTexts [i].text = currentButton.myName + " (" + currentButton.price.ToString("N0") + " cookies)\n" + (currentButton.count == 0 ? "" : currentButton.getProductionDescriptionSingle() + "\n") + currentButton.getProductionDescriptionTotal();
+//				
+				popupTexts [i].rectTransform.anchoredPosition = new Vector2 (0f, 0f);
+			} else {
+				buildingButtonLabels [i].text = "??\n" + buildingButtons [i].price + " cookies";
+			}
 
 			buildingLevelTexts.ElementAt(i).text = buildingButtons[i].count == 0 ? "" : buildingButtons[i].count + "";
 

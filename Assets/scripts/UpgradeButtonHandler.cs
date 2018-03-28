@@ -14,11 +14,13 @@ public class UpgradeButtonHandler : MonoBehaviour {
 	public Text text;
 	public GameStats gameStats;
 	public BuildingButtonHandler buildingButtonHandler;
+	public Text popupText;
 
 	public BuildingUpgrade[] upgrades;
 	public UpgradeButton[] upgradeButtons;
 	public GameObject[] buttonElementHolders;
 	public Text[] buttonTexts;
+	public Text[] popupTexts;
 	public UpgradeButton upgradeButton;
 
 	int oldTotalNonCursors = 0;
@@ -44,6 +46,7 @@ public class UpgradeButtonHandler : MonoBehaviour {
 		upgradeButtons = new UpgradeButton[upgrades.Length];
 		buttonElementHolders = new GameObject[upgrades.Length];
 		buttonTexts = new Text[upgrades.Length];
+		popupTexts = new Text[upgrades.Length];
 
 		float y = 208f;
 		for (int i = 0; i < buttonElementHolders.Length; i++) {
@@ -58,6 +61,10 @@ public class UpgradeButtonHandler : MonoBehaviour {
 			buttonTexts[i] = Instantiate (text, transform.position, transform.rotation);
 			buttonTexts[i].transform.SetParent (upgradeButtons [i].transform, false);
 			buttonTexts[i].transform.localPosition = new Vector2(0f, 0f);
+
+			popupTexts[i] = Instantiate (popupText, transform.position, transform.rotation);
+			popupTexts[i].transform.SetParent (upgradeButtons [i].transform.GetChild(0).transform, false);
+			popupTexts[i].rectTransform.localPosition = new Vector2(0f, 0f);
 
 //			y -= 83.46f;
 			y -= 62.4f;
@@ -106,6 +113,10 @@ public class UpgradeButtonHandler : MonoBehaviour {
 				upgradesQuantityMet.RemoveAt (upgradesQuantityMet.Count - 1);
 //				buttonTexts [i].text = upgradeButtons [i].upgrade.name + "\n(" + upgradeButtons[i].upgrade.basePrice + ")\n" + upgradeButtons[i].upgrade.description;
 				buttonTexts [i].text = upgradeButtons [i].upgrade.name + "\n(" + upgradeButtons[i].upgrade.basePrice + ")";
+				popupTexts [i].text = upgradeButtons [i].upgrade.name + " (" + upgradeButtons [i].upgrade.basePrice + ")\n" + upgradeButtons [i].upgrade.description;
+				popupTexts[i].rectTransform.anchoredPosition = new Vector2(0f, 0f);
+
+
 				buttonTexts [i].rectTransform.localPosition = new Vector2 (buttonTexts [i].rectTransform.localPosition.x, 15f);
 
 				// set the color according to whether it is affordable or not

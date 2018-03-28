@@ -26,4 +26,20 @@ public class BuildingButton : MonoBehaviour {
 	public double getTotalCookiesPerSecond() {
 		return cookiesPerSecond * cookiesPerSecondMultiplier + cookiesPerSecondAddOn;
 	}
+
+	public string getPluralName() {
+		return myName == "factory" ? "factories" : myName + "s";
+	}
+
+	public string getNameSingularOrPlural() {
+		return count == 1 ? myName : getPluralName ();
+	}
+
+	public string getProductionDescriptionTotal() {
+		return count + " " + getNameSingularOrPlural () + " producing " + getTotalCookiesPerSecondCombined ().ToString ("#,##0.##") + " cookie" + (getTotalCookiesPerSecondCombined ()==1.0?"":"s") + " per second";
+	}
+
+	public string getProductionDescriptionSingle() {
+		return "each " + myName + " produces " + getTotalCookiesPerSecond ().ToString ("#,##0.##") + " cookies per second";
+	}
 }

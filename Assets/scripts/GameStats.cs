@@ -7,6 +7,7 @@ public class GameStats : MonoBehaviour {
 
 	public Text cookiesText;
 	public Text cookiesPerSecondText;
+	public Text cookiesPerClickTextTest;
 
 	private System.Threading.Timer timer;
 
@@ -37,7 +38,7 @@ public class GameStats : MonoBehaviour {
 		timer.Change (cookieAddPeriod, cookieAddPeriod);
 
 		// TESTING
-		cookies = 10000000000.0m;
+//		cookies = 10000000000.0m;
 	}
 
 	private void UpdateProperty(object state) {
@@ -52,7 +53,9 @@ public class GameStats : MonoBehaviour {
 		cookiesPerSecondTotal = cookiesPerSecond * cookiesPerSecondMultiplier;
 		cookiesText.text = cookies.ToString("###,###0") + " cookies";
 		cookiesPerSecondText.text = "Per second: " + cookiesPerSecondTotal.ToString(cookiesPerSecondTotal == (int)cookiesPerSecondTotal ? "N0" : "N1");
-	
+
+		cookiesPerClickTextTest.text = "per click orig: " + cookiesPerClick + "\nper click total: " + cookiesPerClickTotal + "\nclick mult: " + cookiesPerClickMultiplier + "\naddOn: " + cookiesPerClickAddOn; // (test)
+
 		handmadeCookiesString = handmadeCookies.ToString ();
 		cookiesPerClickTotalString = cookiesPerClickTotal.ToString ();
 	}

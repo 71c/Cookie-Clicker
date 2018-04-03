@@ -100,10 +100,14 @@ public class UpgradeButtonHandler : MonoBehaviour {
 
 			updateCursorUpgradeIfNeeded (upgrade);
 			updateGrandmaTypeUpgradeIfNeeded (upgrade);
+			updateClickingUpgradeIfNeeded (upgrade);
 
-			if (!upgrade.enabled && quantityMet(upgrade))
+			upgrade.unlocked = quantityMet (upgrade);
+
+			if (!upgrade.enabled && quantityMet (upgrade))
 				upgradesQuantityMet.Add (upgrade);
 		}
+
 		upgradesQuantityMet = sortByPrice (upgradesQuantityMet);
 		for (int i = 0; i < upgradeButtons.Length; i++) {
 			buttonElementHolders[i].gameObject.SetActive(upgradesQuantityMet.Count > 0);
@@ -112,8 +116,8 @@ public class UpgradeButtonHandler : MonoBehaviour {
 				upgradeButtons [i].upgrade = upgradesQuantityMet [upgradesQuantityMet.Count - 1];
 				upgradesQuantityMet.RemoveAt (upgradesQuantityMet.Count - 1);
 //				buttonTexts [i].text = upgradeButtons [i].upgrade.name + "\n(" + upgradeButtons[i].upgrade.basePrice + ")\n" + upgradeButtons[i].upgrade.description;
-				buttonTexts [i].text = upgradeButtons [i].upgrade.name + "\n(" + upgradeButtons[i].upgrade.basePrice + ")";
-				popupTexts [i].text = upgradeButtons [i].upgrade.name + " (" + upgradeButtons [i].upgrade.basePrice + ")\n" + upgradeButtons [i].upgrade.description;
+				buttonTexts [i].text = upgradeButtons [i].upgrade.name + "\n" + decimal.Parse(upgradeButtons[i].upgrade.basePrice).ToString("N0") + " cookies";
+				popupTexts [i].text = upgradeButtons [i].upgrade.name + " (" + decimal.Parse(upgradeButtons [i].upgrade.basePrice).ToString("N0") + " cookies)\n" + upgradeButtons [i].upgrade.description;
 				popupTexts[i].rectTransform.anchoredPosition = new Vector2(0f, 0f);
 
 
@@ -171,9 +175,15 @@ public class UpgradeButtonHandler : MonoBehaviour {
 		}
 	}
 
+	// yeah it's kind of odd to use the upgrade's "cookies per second add on" as a per-click add but whatever it works
 	void updateClickingUpgradeIfNeeded(BuildingUpgrade upgrade) {
 		if (upgrade.enabled && upgrade.upgradeType == "clicking upgrades") {
-//			float cookiesPerSecond = gameStats.cookiesPerSecond
+			double cookiesPerSecond = (double)gameStats.cookiesPerSecondTotal;
+//			decimal cookiesPerClick = gameStats.cookiesPerClick;
+			double add = 0.01 * cookiesPerSecond;
+			gameStats.cookiesPerClickAddOn -= (decimal)upgrade.cookiesPerSecondAddOn;
+			upgrade.cookiesPerSecondAddOn = add;
+			gameStats.cookiesPerClickAddOn += (decimal)upgrade.cookiesPerSecondAddOn;
 		}
 	}
 

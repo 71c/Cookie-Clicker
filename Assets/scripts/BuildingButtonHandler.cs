@@ -107,6 +107,7 @@ public class BuildingButtonHandler : MonoBehaviour {
 				popupTexts [i].rectTransform.anchoredPosition = new Vector2 (0f, 0f);
 			} else {
 				buildingButtonLabels [i].text = "??\n" + buildingButtons [i].price + " cookies";
+				popupTexts [i].text = "??? (" + currentButton.price.ToString("N0") + " cookies)";
 			}
 
 			buildingLevelTexts.ElementAt(i).text = buildingButtons[i].count == 0 ? "" : buildingButtons[i].count + "";

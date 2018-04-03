@@ -10,4 +10,5 @@ public class BuildingUpgrade {
 	public double cookiesPerSecondAddOn = 0.0;
 
 	public bool enabled = false;
+	public bool unlocked = false;
 }

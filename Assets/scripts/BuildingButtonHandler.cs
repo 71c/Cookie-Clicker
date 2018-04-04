@@ -139,7 +139,7 @@ public class BuildingButtonHandler : MonoBehaviour {
 				buildingsDisplays[i].Add((RectTransform)Instantiate(building, transform.position, transform.rotation));
 				buildingsDisplays[i][buildingsDisplays[i].Count - 1].transform.SetParent (buildingHolders [i].transform, false);
 
-				Vector2 buttonPosition = WorldToCanvasPosition (renderCanvas.transform, camera, buttonElementHolders [i].transform.localPosition);
+				Vector2 buttonPosition = WorldToCanvasPosition (new RectTransform(), Camera.main, buttonElementHolders [i].transform.localPosition);
 				buildingsDisplays[i][buildingsDisplays[i].Count - 1].transform.localPosition = new Vector2(buttonPosition.x, buttonPosition.y);
 
 

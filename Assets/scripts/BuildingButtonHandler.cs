@@ -8,6 +8,7 @@ public class BuildingButtonHandler : MonoBehaviour {
 	public BuildingButton button;
 	public Text text;
 	public Text popupText;
+//	public 
 	public Canvas renderCanvas;
 	public List<BuildingButton> buildingButtons = new List<BuildingButton>();
 	public List<GameObject> buttonElementHolders = new List<GameObject> ();
@@ -21,6 +22,8 @@ public class BuildingButtonHandler : MonoBehaviour {
 	string[] names = new string[] { "cursor", "grandma", "farm", "mine", "factory", "bank", "temple", "wizard tower" };
 	int[] prices = new int[] { 15, 100, 1100, 12000, 130000, 1400000, 20000000, 330000000 };
 	double[] baseCookiesPerSeconds = new double[] { 0.1, 1.0, 8.0, 47.0, 260.0, 1400.0, 7800.0, 44000.0 };
+
+//	public List<
 
 	void addNewButton(float x, float y) {
 		int lastIndex = buildingButtons.Count;

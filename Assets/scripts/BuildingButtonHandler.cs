@@ -8,7 +8,8 @@ public class BuildingButtonHandler : MonoBehaviour {
 	public BuildingButton button;
 	public Text text;
 	public Text popupText;
-//	public 
+	public RectTransform building;
+	public RectTransform buildingHolder;
 	public Canvas renderCanvas;
 	public List<BuildingButton> buildingButtons = new List<BuildingButton>();
 	public List<GameObject> buttonElementHolders = new List<GameObject> ();
@@ -23,7 +24,8 @@ public class BuildingButtonHandler : MonoBehaviour {
 	int[] prices = new int[] { 15, 100, 1100, 12000, 130000, 1400000, 20000000, 330000000 };
 	double[] baseCookiesPerSeconds = new double[] { 0.1, 1.0, 8.0, 47.0, 260.0, 1400.0, 7800.0, 44000.0 };
 
-//	public List<
+	public List<RectTransform>[] buildingsDisplays;
+	public List<RectTransform> buildingHolders;
 
 	void addNewButton(float x, float y) {
 		int lastIndex = buildingButtons.Count;
@@ -74,6 +76,11 @@ public class BuildingButtonHandler : MonoBehaviour {
 	}
 
 	void Start() {
+		buildingsDisplays = new List<RectTransform>[names.Length];
+		for (int i = 0; i < buildingsDisplays.Length; i++) {
+			buildingsDisplays [i] = new List<RectTransform> ();
+		}
+
 		float y = 4f;
 		for (int i = 0; i < names.Length; i++) {
 			addNewButton (286.7f, y * 52f);
@@ -121,6 +128,22 @@ public class BuildingButtonHandler : MonoBehaviour {
 			} else {
 				buildingButtons[i].GetComponent<Image> ().color = Color.gray;
 				buildingButtonLabels.ElementAt (i).color = new Color (0.7f, 0.7f, 0.7f);
+			}
+
+			if (buildingButtons[i].count > buildingsDisplays [i].Count) {
+				if (buildingsDisplays [i].Count == 0) {
+					buildingHolders.Add((RectTransform)Instantiate(buildingHolder, transform.position, transform. rotation));
+					buildingHolders [buildingHolders.Count - 1].transform.SetParent (renderCanvas.transform, false);
+					buildingHolders [buildingHolders.Count - 1].transform.position = new Vector2 (0f, 0f);
+				}
+				buildingsDisplays[i].Add((RectTransform)Instantiate(building, transform.position, transform.rotation));
+				buildingsDisplays[i][buildingsDisplays[i].Count - 1].transform.SetParent (buildingHolders [i].transform, false);
+
+				Vector2 buttonPosition = WorldToCanvasPosition (renderCanvas.transform, camera, buttonElementHolders [i].transform.localPosition);
+				buildingsDisplays[i][buildingsDisplays[i].Count - 1].transform.localPosition = new Vector2(buttonPosition.x, buttonPosition.y);
+
+
+
 			}
 		}
 
@@ -170,4 +193,53 @@ public class BuildingButtonHandler : MonoBehaviour {
 			buildingCount += buildingButtons[i].count;
 		return buildingCount;
 	}
+
+//	Vector2 pos = gameObject.transform.position;  // get the game object position
+//	Vector2 viewportPoint = Camera.main.WorldToViewportPoint(pos);  //convert game object position to VievportPoint
+//
+//	// set MIN and MAX Anchor values(positions) to the same position (ViewportPoint)
+//	rectTransform.anchorMin = viewportPoint;  
+//	rectTransform.anchorMax = viewportPoint;
+
+//	public Vector2 worldPositionToCanvasPosition(Vector2 pos) {
+//		RectTransform rectTransform;
+//		RectTransform canvasRectT;
+//		Transform objectToFollow;
+//		Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, objectToFollow.position);
+//
+//
+//		rectTransform.anchoredPosition = screenPoint - canvasRectT.sizeDelta / 2f;
+//
+//		return rectTransform.anchoredPosition;
+//	}
+
+//
+//	public RectTransform canvasRectT;
+//	public RectTransform healthBar;
+//	public Transform objectToFollow;
+//
+//	Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, objectToFollow.position);
+//	healthBar.anchoredPosition = screenPoint - canvasRectT.sizeDelta / 2f;
+
+	private Vector2 WorldToCanvasPosition(RectTransform canvas, Camera camera, Vector2 position) {
+		//Vector position (percentage from 0 to 1) considering camera size.
+		//For example (0,0) is lower left, middle is (0.5,0.5)
+		Vector2 temp = camera.WorldToViewportPoint(position);
+
+		//Calculate position considering our percentage, using our canvas size
+		//So if canvas size is (1100,500), and percentage is (0.5,0.5), current value will be (550,250)
+		temp.x *= canvas.sizeDelta.x;
+		temp.y *= canvas.sizeDelta.y;
+
+		//The result is ready, but, this result is correct if canvas recttransform pivot is 0,0 - left lower corner.
+		//But in reality its middle (0.5,0.5) by default, so we remove the amount considering cavnas rectransform pivot.
+		//We could multiply with constant 0.5, but we will actually read the value, so if custom rect transform is passed(with custom pivot) , 
+		//returned value will still be correct.
+
+		temp.x -= canvas.sizeDelta.x * canvas.pivot.x;
+		temp.y -= canvas.sizeDelta.y * canvas.pivot.y;
+
+		return temp;
+	}
+
 }

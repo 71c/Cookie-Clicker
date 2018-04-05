@@ -24,16 +24,24 @@ public class UpgradeButtonHandler : MonoBehaviour {
 
 	int oldTotalNonCursors = 0;
 
+	public StringReader reader;
 
 	public ButtonsCollection jsonToBuildingUpgradeButtons(string json) {
 		return JsonUtility.FromJson<ButtonsCollection>(json);
 	}
 
 	void Start () {
-		string path = "Assets/Resources/json.txt";
+		
 
-		//Read the text from directly from the json.txt file
-		StreamReader reader = new StreamReader(path); 
+//		string path = "Assets/Resources/json.txt";
+//
+//		//Read the text from directly from the json.txt file
+//		StreamReader reader = new StreamReader(path); 
+//		string json = reader.ReadToEnd();
+//		reader.Close();
+
+		TextAsset file = (TextAsset)Resources.Load("json");
+		reader = new StringReader (file.text);
 		string json = reader.ReadToEnd();
 		reader.Close();
 

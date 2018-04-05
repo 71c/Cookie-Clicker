@@ -42,4 +42,5 @@ public class BuildingButton : MonoBehaviour {
 	public string getProductionDescriptionSingle() {
 		return "each " + myName + " produces " + getTotalCookiesPerSecond ().ToString ("#,##0.##") + " cookies per second";
 	}
+
 }

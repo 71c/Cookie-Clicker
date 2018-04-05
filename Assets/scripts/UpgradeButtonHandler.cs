@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using System;
 using System.Linq;
 using System.IO;
-//using System.Numerics;
 using System.Text.RegularExpressions;
 
 public class UpgradeButtonHandler : MonoBehaviour {
@@ -52,7 +51,7 @@ public class UpgradeButtonHandler : MonoBehaviour {
 		for (int i = 0; i < buttonElementHolders.Length; i++) {
 			buttonElementHolders[i] = new GameObject();
 			buttonElementHolders [i].transform.SetParent (renderCanvas.transform, false);
-			buttonElementHolders[i].transform.localPosition = new Vector2(086.7f, y);
+			buttonElementHolders[i].transform.localPosition = new Vector2(190f, y);
 
 			upgradeButtons [i] = (UpgradeButton)Instantiate (upgradeButton, transform.position, transform.rotation);
 			upgradeButtons [i].transform.SetParent (buttonElementHolders [i].transform, false);
@@ -61,6 +60,7 @@ public class UpgradeButtonHandler : MonoBehaviour {
 			buttonTexts[i] = Instantiate (text, transform.position, transform.rotation);
 			buttonTexts[i].transform.SetParent (upgradeButtons [i].transform, false);
 			buttonTexts[i].transform.localPosition = new Vector2(0f, 0f);
+			buttonTexts [i].alignment = TextAnchor.MiddleCenter;
 
 			popupTexts[i] = Instantiate (popupText, transform.position, transform.rotation);
 			popupTexts[i].transform.SetParent (upgradeButtons [i].transform.GetChild(0).transform, false);
@@ -115,11 +115,10 @@ public class UpgradeButtonHandler : MonoBehaviour {
 				// set the upgrade of the button to the last upgrade in the list and remove the upgrade from the list
 				upgradeButtons [i].upgrade = upgradesQuantityMet [upgradesQuantityMet.Count - 1];
 				upgradesQuantityMet.RemoveAt (upgradesQuantityMet.Count - 1);
-//				buttonTexts [i].text = upgradeButtons [i].upgrade.name + "\n(" + upgradeButtons[i].upgrade.basePrice + ")\n" + upgradeButtons[i].upgrade.description;
-				buttonTexts [i].text = upgradeButtons [i].upgrade.name + "\n" + decimal.Parse(upgradeButtons[i].upgrade.basePrice).ToString("N0") + " cookies";
-				popupTexts [i].text = upgradeButtons [i].upgrade.name + " (" + decimal.Parse(upgradeButtons [i].upgrade.basePrice).ToString("N0") + " cookies)\n" + upgradeButtons [i].upgrade.description;
-				popupTexts[i].rectTransform.anchoredPosition = new Vector2(0f, 0f);
 
+				buttonTexts [i].text = upgradeButtons [i].upgrade.name;
+				popupTexts [i].text = upgradeButtons [i].upgrade.name + " (" + gameStats.formatNumber (decimal.Parse(upgradeButtons[i].upgrade.basePrice), 0) + " cookies)\n" + upgradeButtons [i].upgrade.description;
+				popupTexts[i].rectTransform.anchoredPosition = new Vector2(0f, 0f);
 
 				buttonTexts [i].rectTransform.localPosition = new Vector2 (buttonTexts [i].rectTransform.localPosition.x, 15f);
 

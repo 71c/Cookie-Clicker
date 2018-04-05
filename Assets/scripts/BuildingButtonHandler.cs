@@ -10,11 +10,14 @@ public class BuildingButtonHandler : MonoBehaviour {
 	public Text popupText;
 	public RectTransform building;
 	public RectTransform buildingHolder;
+	public RectTransform scrollOnMe;
 	public Canvas renderCanvas;
 	public List<BuildingButton> buildingButtons = new List<BuildingButton>();
 	public List<GameObject> buttonElementHolders = new List<GameObject> ();
 
-	public List<Text> buildingButtonLabels = new List<Text> ();
+
+	public List<Text> buildingButtonLabelNames = new List<Text> ();
+	public List<Text> buildingButtonLabelPrices = new List<Text> ();
 	public List<Text> buildingLevelTexts = new List<Text> ();
 	public List<Text> popupTexts = new List<Text> ();
 
@@ -26,6 +29,7 @@ public class BuildingButtonHandler : MonoBehaviour {
 
 	public List<RectTransform>[] buildingsDisplays;
 	public List<RectTransform> buildingHolders;
+	public List<RectTransform> scrollOnMees;
 
 	void addNewButton(float x, float y) {
 		int lastIndex = buildingButtons.Count;
@@ -47,25 +51,38 @@ public class BuildingButtonHandler : MonoBehaviour {
 
 
 		// add a text to buildingButtonLables
-		buildingButtonLabels.Add(Instantiate(text, transform.position, transform.rotation) as Text);
+		buildingButtonLabelNames.Add(Instantiate(text, transform.position, transform.rotation) as Text);
+		buildingButtonLabelNames [lastIndex].alignment = TextAnchor.UpperLeft;
 		// set parent to element holder
-		buildingButtonLabels.ElementAt(lastIndex).transform.SetParent(buildingButtons.ElementAt (lastIndex).transform, false);
+		buildingButtonLabelNames.ElementAt(lastIndex).transform.SetParent(buildingButtons.ElementAt (lastIndex).transform, false);
 		// set the text to "??"
-		setText (buildingButtonLabels.ElementAt (lastIndex), "??", 18);
+		setText (buildingButtonLabelNames.ElementAt (lastIndex), "??", 18);
 		// set position
-		buildingButtonLabels.ElementAt(lastIndex).transform.localPosition = new Vector2(0f, 0f);
+		buildingButtonLabelNames.ElementAt(lastIndex).transform.localPosition = new Vector2(5f, 0f);
 		// set color
-		buildingButtonLabels.ElementAt(lastIndex).color = Color.white;
+		buildingButtonLabelNames.ElementAt(lastIndex).color = Color.white;
+
+
+
+
+		buildingButtonLabelPrices.Add(Instantiate(text, transform.position, transform.rotation) as Text);
+		buildingButtonLabelPrices [lastIndex].alignment = TextAnchor.UpperLeft;
+		buildingButtonLabelPrices[lastIndex].transform.SetParent(buildingButtons.ElementAt (lastIndex).transform, false);
+		setText (buildingButtonLabelPrices[lastIndex], "??", 14);
+		buildingButtonLabelPrices[lastIndex].transform.localPosition = new Vector2(5f, -20f);
+		buildingButtonLabelPrices[lastIndex].color = Color.white;
+
 
 
 		// add a text to buildingLevelTexts
 		buildingLevelTexts.Add(Instantiate(text, transform.position, transform.rotation) as Text);
+		buildingLevelTexts [lastIndex].alignment = TextAnchor.UpperLeft;
 		// set text to "0"
-		setText (buildingLevelTexts.ElementAt (lastIndex), "0", 36);
+		setText (buildingLevelTexts.ElementAt (lastIndex), "0", 20);
 		// set parent to element holder
 		buildingLevelTexts.ElementAt(lastIndex).transform.SetParent(buttonElementHolders.ElementAt (lastIndex).transform, false);
 		// set position
-		buildingLevelTexts.ElementAt(lastIndex).transform.localPosition = new Vector2(120f, 0f);
+		buildingLevelTexts.ElementAt(lastIndex).transform.localPosition = new Vector2(151.1f, 0f);
 		// set color
 		buildingLevelTexts.ElementAt(lastIndex).color = Color.white;
 
@@ -77,25 +94,40 @@ public class BuildingButtonHandler : MonoBehaviour {
 
 	void Start() {
 		buildingsDisplays = new List<RectTransform>[names.Length];
-		for (int i = 0; i < buildingsDisplays.Length; i++) {
-			buildingsDisplays [i] = new List<RectTransform> ();
-		}
 
-		float y = 4f;
+		float y = 208f;
 		for (int i = 0; i < names.Length; i++) {
-			addNewButton (286.7f, y * 52f);
-//			y -= 1.605f;
-			y -= 1.2f;
+			float x = 350f;
+
+			addNewButton (x, y);
+
+			buildingsDisplays [i] = new List<RectTransform> ();
+
+//			buildingHolders.Add((RectTransform)Instantiate(buildingHolder, transform.position, transform. rotation));
+//			buildingHolders [buildingHolders.Count - 1].transform.SetParent (renderCanvas.transform, false);
+//			buildingHolders [buildingHolders.Count - 1].transform.localPosition = new Vector2 (x - 410f, y);
+//			buildingHolders [buildingHolders.Count - 1].gameObject.SetActive (false);
+
+			scrollOnMees.Add((RectTransform)Instantiate(scrollOnMe, transform.position, transform. rotation));
+			scrollOnMees [scrollOnMees.Count - 1].transform.SetParent (renderCanvas.transform, false);
+			scrollOnMees [scrollOnMees.Count - 1].localPosition = new Vector2 (-170f, y);
+			scrollOnMees [scrollOnMees.Count - 1].gameObject.SetActive (false);
+
+			buildingHolders.Add((RectTransform)Instantiate(buildingHolder, transform.position, transform. rotation));
+			buildingHolders [buildingHolders.Count - 1].transform.SetParent (scrollOnMees[scrollOnMees.Count - 1].transform, false);
+			buildingHolders [buildingHolders.Count - 1].transform.localPosition = new Vector2 (0f, 0f);
+
+			ScrollRect scrollRect = scrollOnMees [scrollOnMees.Count - 1].GetComponent<ScrollRect>();
+			scrollRect.content = buildingHolders [buildingHolders.Count - 1];
+
+			y -= 62.4f;
 		}
 		buildingButtons[0].isButtonVisible = true;
 		buildingButtons[1].isButtonVisible = true;
-
-		// TESTING
-//		findButtonWithName ("cursor").count = 25;
 	}
 
 	void Update() {
-		for (int i = 0; i < buildingButtonLabels.Count; i++) {
+		for (int i = 0; i < buildingButtonLabelNames.Count; i++) {
 
 			BuildingButton currentButton = buildingButtons[i];
 
@@ -111,42 +143,38 @@ public class BuildingButtonHandler : MonoBehaviour {
 			buttonElementHolders[i].gameObject.SetActive(currentButton.isButtonVisible);
 
 			if (currentButton.isNameVisible) {
-				buildingButtonLabels [i].text = names [i] + "\n" + currentButton.price.ToString("N0") + " cookies";
-				popupTexts [i].text = currentButton.myName + " (" + currentButton.price.ToString("N0") + " cookies)\n" + (currentButton.count == 0 ? "" : currentButton.getProductionDescriptionSingle() + "\n") + currentButton.getProductionDescriptionTotal();
-//				
+				buildingButtonLabelNames [i].text = names [i];
+
+				popupTexts [i].text = currentButton.myName + " (" + gameStats.formatNumber(currentButton.price, 0) + " cookies)\n" + (currentButton.count == 0 ? "" : currentButton.getProductionDescriptionSingle() + "\n") + currentButton.getProductionDescriptionTotal();
 				popupTexts [i].rectTransform.anchoredPosition = new Vector2 (0f, 0f);
 			} else {
-				buildingButtonLabels [i].text = "??\n" + buildingButtons [i].price + " cookies";
-				popupTexts [i].text = "??? (" + currentButton.price.ToString("N0") + " cookies)";
+				buildingButtonLabelNames [i].text = "???";
+				popupTexts [i].text = "??? (" + gameStats.formatNumber(currentButton.price, 0) + " cookies)";
 			}
+			buildingButtonLabelPrices [i].text = gameStats.formatNumber (currentButton.price, 0) + " cookies";
+
 
 			buildingLevelTexts.ElementAt(i).text = buildingButtons[i].count == 0 ? "" : buildingButtons[i].count + "";
 
 			if (gameStats.cookies >= buildingButtons.ElementAt (i).price) {
 				buildingButtons[i].GetComponent<Image> ().color = new Color (0.7f, 0.7f, 0.7f);
-				buildingButtonLabels.ElementAt (i).color = Color.white;
+				buildingButtonLabelNames.ElementAt (i).color = Color.white;
+				buildingButtonLabelPrices [i].color = Color.green;
 			} else {
 				buildingButtons[i].GetComponent<Image> ().color = Color.gray;
-				buildingButtonLabels.ElementAt (i).color = new Color (0.7f, 0.7f, 0.7f);
+				buildingButtonLabelNames.ElementAt (i).color = new Color (0.7f, 0.7f, 0.7f);
+				buildingButtonLabelPrices [i].color = Color.red;
 			}
 
 			if (buildingButtons[i].count > buildingsDisplays [i].Count) {
-				if (buildingsDisplays [i].Count == 0) {
-					buildingHolders.Add((RectTransform)Instantiate(buildingHolder, transform.position, transform. rotation));
-					buildingHolders [buildingHolders.Count - 1].transform.SetParent (renderCanvas.transform, false);
-					buildingHolders [buildingHolders.Count - 1].transform.position = new Vector2 (0f, 0f);
-				}
+				if (buildingsDisplays [i].Count == 0) // we just got a new building, the first of its kind
+					scrollOnMees [i].gameObject.SetActive (true);
 				buildingsDisplays[i].Add((RectTransform)Instantiate(building, transform.position, transform.rotation));
 				buildingsDisplays[i][buildingsDisplays[i].Count - 1].transform.SetParent (buildingHolders [i].transform, false);
-
-				Vector2 buttonPosition = WorldToCanvasPosition (new RectTransform(), Camera.main, buttonElementHolders [i].transform.localPosition);
-				buildingsDisplays[i][buildingsDisplays[i].Count - 1].transform.localPosition = new Vector2(buttonPosition.x, buttonPosition.y);
-
-
-
+				buildingsDisplays[i][buildingsDisplays[i].Count - 1].gameObject.SetActive (true);
 			}
 		}
-
+		
 		refreshCookiesPerSecond ();
 	}
 
@@ -192,54 +220,6 @@ public class BuildingButtonHandler : MonoBehaviour {
 		for (int i = 0; i < buildingButtons.Count; i++)
 			buildingCount += buildingButtons[i].count;
 		return buildingCount;
-	}
-
-//	Vector2 pos = gameObject.transform.position;  // get the game object position
-//	Vector2 viewportPoint = Camera.main.WorldToViewportPoint(pos);  //convert game object position to VievportPoint
-//
-//	// set MIN and MAX Anchor values(positions) to the same position (ViewportPoint)
-//	rectTransform.anchorMin = viewportPoint;  
-//	rectTransform.anchorMax = viewportPoint;
-
-//	public Vector2 worldPositionToCanvasPosition(Vector2 pos) {
-//		RectTransform rectTransform;
-//		RectTransform canvasRectT;
-//		Transform objectToFollow;
-//		Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, objectToFollow.position);
-//
-//
-//		rectTransform.anchoredPosition = screenPoint - canvasRectT.sizeDelta / 2f;
-//
-//		return rectTransform.anchoredPosition;
-//	}
-
-//
-//	public RectTransform canvasRectT;
-//	public RectTransform healthBar;
-//	public Transform objectToFollow;
-//
-//	Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, objectToFollow.position);
-//	healthBar.anchoredPosition = screenPoint - canvasRectT.sizeDelta / 2f;
-
-	private Vector2 WorldToCanvasPosition(RectTransform canvas, Camera camera, Vector2 position) {
-		//Vector position (percentage from 0 to 1) considering camera size.
-		//For example (0,0) is lower left, middle is (0.5,0.5)
-		Vector2 temp = camera.WorldToViewportPoint(position);
-
-		//Calculate position considering our percentage, using our canvas size
-		//So if canvas size is (1100,500), and percentage is (0.5,0.5), current value will be (550,250)
-		temp.x *= canvas.sizeDelta.x;
-		temp.y *= canvas.sizeDelta.y;
-
-		//The result is ready, but, this result is correct if canvas recttransform pivot is 0,0 - left lower corner.
-		//But in reality its middle (0.5,0.5) by default, so we remove the amount considering cavnas rectransform pivot.
-		//We could multiply with constant 0.5, but we will actually read the value, so if custom rect transform is passed(with custom pivot) , 
-		//returned value will still be correct.
-
-		temp.x -= canvas.sizeDelta.x * canvas.pivot.x;
-		temp.y -= canvas.sizeDelta.y * canvas.pivot.y;
-
-		return temp;
 	}
 
 }

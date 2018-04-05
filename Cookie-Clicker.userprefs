@@ -1,29 +1,6 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-<<<<<<< HEAD
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/UpgradeButtonHandler.cs">
-    <Files>
-      <File FileName="Assets/scripts/BuildingUpgrade.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/BuildingButton.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/BuildingButtonHandler.cs" Line="174" Column="86" />
-      <File FileName="Assets/scripts/UpgradeButtonHandler.cs" Line="45" Column="3" />
-      <File FileName="Assets/scripts/Cookie.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/GameStats.cs" Line="80" Column="19" />
-=======
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/Cookie.cs">
-    <Files>
-      <File FileName="Assets/scripts/GameStats.cs" Line="57" Column="21" />
-      <File FileName="Assets/scripts/BuildingButton.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/BuildingUpgrade.cs" Line="11" Column="2" />
-      <File FileName="Assets/scripts/BuildingButtonHandler.cs" Line="174" Column="86" />
-      <File FileName="Assets/scripts/UpgradeButtonHandler.cs" Line="45" Column="36" />
-      <File FileName="Assets/scripts/Cookie.cs" Line="41" Column="11" />
->>>>>>> 896f910f946a512c465d77285a1299f2c66bcd5e
-      <File FileName="Assets/scripts/UpgradeButton.cs" Line="1" Column="1" />
-      <File FileName="Assets/test.txt" Line="1" Column="1" />
-      <File FileName="Assets/scripts/json.txt" Line="1" Column="97" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

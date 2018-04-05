@@ -59,7 +59,7 @@
      <Compile Include="Assets\scripts\UpgradeButton.cs" />
      <Compile Include="Assets\scripts\UpgradeButtonHandler.cs" />
      <None Include="Assets\test.txt" />
-     <None Include="Assets\scripts\json.txt" />
+     <None Include="Assets\Resources\json.txt" />
  <Reference Include="Facebook.Unity.Settings">
  <HintPath>/Users/alon/Documents/GitHub/Cookie-Clicker/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
  </Reference>

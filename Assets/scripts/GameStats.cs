@@ -54,7 +54,7 @@ public class GameStats : MonoBehaviour {
 		zeroCountsToWords.Add(27, "octillion");
 		zeroCountsToWords.Add(30, "nonillion");
 
-//		cookies = 100000000m; // testing
+//		cookies = 123876544m; // testing
 	}
 
 	private void UpdateProperty(object state) {
@@ -66,7 +66,7 @@ public class GameStats : MonoBehaviour {
 	void Update () {
 		cookiesPerClickTotal = cookiesPerClick * cookiesPerClickMultiplier + cookiesPerClickAddOn;
 		cookiesPerSecondTotal = cookiesPerSecond * cookiesPerSecondMultiplier;
-		string formattedCookieCount = formatNumber (cookies, shortenNumbers ? 3 : 0);
+		string formattedCookieCount = formatNumber (cookies, (shortenNumbers ? 3 : 0));
 		cookiesText.text = formattedCookieCount + " cookies";
 		cookiesPerSecondText.text = "Per second: " + cookiesPerSecondTotal.ToString(cookiesPerSecondTotal == (int)cookiesPerSecondTotal ? "N0" : "N1");
 
@@ -79,7 +79,7 @@ public class GameStats : MonoBehaviour {
 	string spelledOutNumber(decimal num, int places) {
 		if (num < 1000m)
 			return Decimal.Round(num) + "";
-		num = Decimal.Round(num / 1000m) * 1000m;
+//		num = Decimal.Round(num / 10m) * 10m;
 		num = Decimal.Round(num * (decimal)Math.Pow(10.0, (double)places)) / (decimal)Math.Pow(10.0, (double)places);
 		string strNum = num + "";
 		int headNumLen = strNum.Length % 3 == 0 ? 3 : strNum.Length % 3;

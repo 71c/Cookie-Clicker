@@ -33,7 +33,7 @@ public class Cookie : MonoBehaviour {
 
 	public float changeSpeed = 0.5f;
 
-
+	public Camera m_OrthographicCamera;
 
 	public float sizeD = 0f;
 
@@ -69,7 +69,10 @@ public class Cookie : MonoBehaviour {
 		sine = Mathf.Sin ((Time.realtimeSinceStartup - sineStart) / period) * envelope;
 		size = newSize;
 		actualSize = scale * (size + (wobbleOn ? sine : 0f));
-		transform.localScale = new Vector2 (actualSize, actualSize);
+
+		RectTransform myRectTransform = GetComponent<RectTransform>();
+		myRectTransform.localScale = new Vector2 (actualSize, actualSize);
+	
 
 		// this is orteil's method
 //		sizeD += (sizeDesired - size) * 0.75f;
@@ -77,6 +80,15 @@ public class Cookie : MonoBehaviour {
 //		size += sizeD;
 //		size = Mathf.Max (0.1f, size);
 //		transform.localScale = new Vector2 (scale * size, scale * size);
+	}
+
+	void Start() {
+//		float x = Screen.width;
+//		float y = Screen.height;
+//		float myX = x * (-6.65f / 882f);
+//
+//		RectTransform myRectTransform = GetComponent<RectTransform>();
+//		myRectTransform.localPosition = new Vector3(myX, transform.position.y, -1f);
 	}
 }
 
